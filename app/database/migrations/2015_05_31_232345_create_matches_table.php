@@ -14,16 +14,16 @@ class CreateMatchesTable extends Migration {
 		Schema::create('matches', function(Blueprint $table) {
 			$table->increments('id');
 			//User Location
-			$table->integer('user_id')->unique();	// restrict one match per user
-			$table->integer('max_distance');
-			$table->integer('minAge');
-			$table->integer('maxAge');
-			$table->integer('minPrice');
-			$table->integer('maxPrice');
-			$table->string('comment', 200);
-			$table->char('gender', 1);
-			$table->timestamp('start_time');
-			$table->timestamp('end_time');
+			$table->integer('userId')->unique();	// restrict one match per user
+			$table->integer('maxDistance')->nullable();
+			$table->integer('minAge')->nullable();
+			$table->integer('maxAge')->nullable();
+			$table->integer('minPrice')->nullable();
+			$table->integer('maxPrice')->nullable();
+			$table->string('comment', 200)->nullable();
+			$table->char('gender', 1)->nullable();
+			$table->timestamp('startTime')->nullable();
+			$table->timestamp('endTime')->nullable();
 			$table->timestamps();
 		});
 	}

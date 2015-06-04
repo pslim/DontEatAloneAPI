@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('Paiges-MacBook-Pro.local'),
+	'local' => array('Paiges-MacBook-Pro.local', 'v1020-wn-126-203.campus-dynamic.uwaterloo.ca'), // remove waterloo
 
 ));
 

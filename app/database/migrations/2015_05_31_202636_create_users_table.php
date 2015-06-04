@@ -18,13 +18,15 @@ class CreateUsersTable extends Migration {
 			$table->string('email')->unique();
 			$table->string('password');
 			//Facebook
-			$table->string('name');
-			$table->string('image_url');
-			$table->char('gender', 1);
-			$table->integer('age');
-			$table->integer('rating');
-			$table->longText('description');
+			$table->string('name')->nullable();
+			$table->string('image_url')->nullable();
+			$table->char('gender', 1)->nullable();
+			$table->integer('age')->nullable();
+			$table->integer('rating')->nullable();
+			$table->longText('description')->nullable();
 			$table->timestamps();
+
+			//TODO: Figure out which fields we want nullable
 		});
 	}
 

@@ -11,18 +11,6 @@ class UsersController extends \BaseController {
 		return User::all();
 	}
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -38,14 +26,14 @@ class UsersController extends \BaseController {
 
 
 		// Store in database
-		$username = Input::get('username');
+		$email = Input::get('email');
 		$user = new User;
-		$user->username = $username;
+		$user->email = $email;
 		$user->password = Hash::make(Input::get('password'));
 		$user->save();
 
 		// Return the user we just made
-		$newUser = User::whereUsername($username)->first();
+		$newUser = User::whereEmail($email)->first();
 
 		return $newUser;
 	}
@@ -61,28 +49,52 @@ class UsersController extends \BaseController {
 		return User::whereId($id)->first();
 	}
 
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
 	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
+	public function update($id) {
+		// Check if user id exists
+		$user = User::whereId($id)->first();
+		if ($user == null) {
+			return 'User does not exist';
+		}
+
+		// TODO: Validation
+
+		// Update fields if they were inputted parameters
+		if ($password = Input::get('password')) {
+			$user->password = Hash::make($password);
+		}
+
+		if ($name = Input::get('name')) {
+			$user->name = $name;
+		}
+
+		if ($imageUrl = Input::get('image_url')) {
+			$user->image_url = $imageUrl;
+		}
+
+		if ($gender = Input::get('gender')) {
+			$user->gender = $gender;
+		}
+
+		if ($age = Input::get('age')) {
+			$user->age = $age;
+		}
+
+		if ($description = Input::get('description')) {
+			$user->description = $description;
+		}
+
+		$user->save();
+
+		// Return the user we just updated
+		$updatedUser = User::whereId($id)->first();
+
+		return $updatedUser;
 	}
 
 
@@ -96,6 +108,5 @@ class UsersController extends \BaseController {
 	{
 		//
 	}
-
 
 }

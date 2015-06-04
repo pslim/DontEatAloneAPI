@@ -11,11 +11,24 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	public $timestamps = false;
 
-	protected $fillable = ['username', 'password'];
+	protected $fillable = [
+		'email', 
+		'password',
+		'name',
+		'gender',
+		'age',
+		'image_url',
+		'description'
+	];
 
 	public static $rules = [
-		'username'	=>	'required',
+		'email'		=>	'required',	//TODO: check if email
 		'password'	=>	'required'
+	];
+
+	// TODO:
+	public static $updatedRules = [
+	
 	];
 
 	/**
