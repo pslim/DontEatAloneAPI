@@ -1,6 +1,17 @@
 <?php
 
+use DEA\Transformers\UserTransformer;
+
 class UsersController extends \BaseController {
+
+	/**
+	 *	@var DEA\Transformers\UserTransformer
+	 */
+	protected $userTransformer;
+
+	function __construct(\DEA\Transformers\UserTransformer $userTransformer) {
+		$this->userTransformer = $userTransformer;
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -8,7 +19,11 @@ class UsersController extends \BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		return User::all();
+		$users = User::all();
+
+		return Response::json([
+			'data' => $this->userTransformer->transformCollection($users->all())
+		], 200);
 	}
 
 	/**
@@ -46,7 +61,20 @@ class UsersController extends \BaseController {
 	 * @return Response
 	 */
 	public function show($id) {
-		return User::whereId($id)->first();
+		$user = User::find($id);
+
+		// user does not exist
+		if (!$user) {
+			return Response::json([
+				'error'	=>	[
+					'message'	=>	'User does not exist'
+				]
+			], 404);
+		}
+
+		return Response::json([
+			'data'	=>	$this->userTransformer->transform($user)
+		], 200);
 	}
 
 	/**
@@ -104,8 +132,7 @@ class UsersController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		//
 	}
 

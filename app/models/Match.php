@@ -11,5 +11,4 @@ class Match extends Eloquent {
 	 * @var string
 	 */
 	protected $table = 'matches';
-
 }
