@@ -1,19 +1,19 @@
 <?php
 
-use DEA\Transformers\MatchTransformer;
+// use DEA\Transformers\MatchTransformer;
 
 class MatchesController extends ApiController {
 
 	/**
 	 * @var DEA\Transformers\MatchTransformer
 	 */
-	protected $matchTransformer;
+	// protected $matchTransformer;
 
-	function __construct(MatchTransformer $matchTransformer) {
-		$this->matchTransformer = $matchTransformer;
+	// function __construct(MatchTransformer $matchTransformer) {
+	// 	$this->matchTransformer = $matchTransformer;
 
 		// $this->beforeFilter('auth.basic', ['on' => 'post']);		This is not working
-	}
+	// }
 
 	/**
 	 * Display a listing of the resource.
@@ -30,7 +30,8 @@ class MatchesController extends ApiController {
 		$matches = Match::paginate($limit);
 
 		return $this->respondWithPagination($matches, [
-			'data' => $this->matchTransformer->transformCollection($matches->all())
+			// 'data' => $this->matchTransformer->transformCollection($matches->all())
+			'data' => $matches->all()
 		]);
 	}
 

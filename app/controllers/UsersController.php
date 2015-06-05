@@ -1,17 +1,17 @@
 <?php
 
-use DEA\Transformers\UserTransformer;
+// use DEA\Transformers\UserTransformer;
 
 class UsersController extends ApiController {
 
 	/**
 	 * @var DEA\Transformers\UserTransformer
 	 */
-	protected $userTransformer;
+	// protected $userTransformer;
 
-	function __construct(UserTransformer $userTransformer) {
-		$this->userTransformer = $userTransformer;
-	}
+	// function __construct(UserTransformer $userTransformer) {
+	// 	$this->userTransformer = $userTransformer;
+	// }
 
 	/**
 	 * Display a listing of the resource.
@@ -25,7 +25,8 @@ class UsersController extends ApiController {
 		$users = User::paginate($limit);
 
 		return $this->respondWithPagination($users, [
-			'data' => $this->userTransformer->transformCollection($users->all())
+			// 'data' => $this->userTransformer->transformCollection($users->all())
+			'data' => $users->all()
 		]);
 	}
 
@@ -75,7 +76,8 @@ class UsersController extends ApiController {
 		}
 
 		return $this->respond([
-			'data'	=>	$this->userTransformer->transform($user)
+			// 'data'	=>	$this->userTransformer->transform($user)
+			'data'	=>	$user
 		]);
 	}
 
