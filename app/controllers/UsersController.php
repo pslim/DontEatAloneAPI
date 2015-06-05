@@ -5,11 +5,11 @@ use DEA\Transformers\UserTransformer;
 class UsersController extends ApiController {
 
 	/**
-	 *	@var DEA\Transformers\UserTransformer
+	 * @var DEA\Transformers\UserTransformer
 	 */
 	protected $userTransformer;
 
-	function __construct(\DEA\Transformers\UserTransformer $userTransformer) {
+	function __construct(UserTransformer $userTransformer) {
 		$this->userTransformer = $userTransformer;
 	}
 
@@ -19,9 +19,12 @@ class UsersController extends ApiController {
 	 * @return Response
 	 */
 	public function index() {
-		$users = User::all();
 
-		return $this->respond([
+		$limit = Input::get('limit') ? : 30;
+		// TODO: max limit that the client can retrieve
+		$users = User::paginate($limit);
+
+		return $this->respondWithPagination($users, [
 			'data' => $this->userTransformer->transformCollection($users->all())
 		]);
 	}
@@ -36,21 +39,25 @@ class UsersController extends ApiController {
 		// Validation
 		$validator = Validator::make(Input::all(), User::$rules);
 		if ($validator->fails()) {
-			return "failed validation.  Will input proper error message later...";
+			return $this->respondCreateError('Parameters failed validation for a user.');
 		}
 
 
-		// Store in database
-		$email = Input::get('email');
-		$user = new User;
-		$user->email = $email;
-		$user->password = Hash::make(Input::get('password'));
-		$user->save();
+		// // Store in database
+		// $email = Input::get('email');
+		// $user = new User;
+		// $user->email = $email;
+		// $user->password = Hash::make(Input::get('password'));
+		// $user->save();
 
-		// Return the user we just made
-		$newUser = User::whereEmail($email)->first();
+		// // Return the user we just made
+		// $newUser = User::whereEmail($email)->first();
 
-		return $newUser;
+		// return $newUser;
+
+		User::create(Input::all());
+
+		return $this->respondCreated('User successfully created.');
 	}
 
 
@@ -63,7 +70,6 @@ class UsersController extends ApiController {
 	public function show($id) {
 		$user = User::find($id);
 
-		// user does not exist
 		if (!$user) {
 			return $this->respondNotFound('User does not exist.');
 		}

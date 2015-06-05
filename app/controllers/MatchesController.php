@@ -1,14 +1,37 @@
 <?php
 
-class MatchesController extends \BaseController {
+use DEA\Transformers\MatchTransformer;
+
+class MatchesController extends ApiController {
+
+	/**
+	 * @var DEA\Transformers\MatchTransformer
+	 */
+	protected $matchTransformer;
+
+	function __construct(MatchTransformer $matchTransformer) {
+		$this->matchTransformer = $matchTransformer;
+
+		// $this->beforeFilter('auth.basic', ['on' => 'post']);		This is not working
+	}
 
 	/**
 	 * Display a listing of the resource.
 	 *
+	 * @param null $id
 	 * @return Response
 	 */
-	public function index() {
-		return Match::all();
+	public function index($userId = null) {
+		$limit = Input::get('limit') ? : 30;
+		// TODO: max limit that the client can retrieve
+		// TODO:
+		// findOrFail gives 'Resource not found' if fails
+		// $matches = $userId ? User::findOrFail($userId)->matches : Match::all();	change to limits
+		$matches = Match::paginate($limit);
+
+		return $this->respondWithPagination($matches, [
+			'data' => $this->matchTransformer->transformCollection($matches->all())
+		]);
 	}
 
 	/**
@@ -89,8 +112,7 @@ class MatchesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
+	public function update($id) {
 		//
 	}
 
@@ -101,8 +123,7 @@ class MatchesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		//
 	}
 
