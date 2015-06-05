@@ -26,7 +26,9 @@ class UsersController extends ApiController {
 
 		return $this->respondWithPagination($users, [
 			// 'data' => $this->userTransformer->transformCollection($users->all())
-			'data' => $users->all()
+			'data' => [
+				'users' => $users->all()
+			]
 		]);
 	}
 
@@ -43,22 +45,20 @@ class UsersController extends ApiController {
 			return $this->respondCreateError('Parameters failed validation for a user.');
 		}
 
+		$input = Input::all();
+		if (!isset($input['image_url'])) {
+			$faker = Faker\Factory::create();
+			$input['image_url'] = $faker->imageUrl(640, 480, 'cats');
+		}
+		$user = User::create($input);
 
-		// // Store in database
-		// $email = Input::get('email');
-		// $user = new User;
-		// $user->email = $email;
-		// $user->password = Hash::make(Input::get('password'));
-		// $user->save();
+		Auth::login($user);
 
-		// // Return the user we just made
-		// $newUser = User::whereEmail($email)->first();
-
-		// return $newUser;
-
-		User::create(Input::all());
-
-		return $this->respondCreated('User successfully created.');
+		return $this->respondCreated('User successfully created.', [
+			'data' => [
+				'user' => $user
+			]
+		]);
 	}
 
 

@@ -21,4 +21,9 @@ Route::group(['prefix' => 'api/v1'], function() {
 	Route::resource('matches', 'MatchesController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 	Route::get('users/{id}/matches', 'MatchesController@index');
+
+	# Authentication
+	Route::get('login', ['as' => 'login', 'uses' => 'SessionsController@store']);
+	Route::get('logout', ['as' => 'logout', 'uses' => 'SessionsController@destroy']);
+	Route::resource('sessions', 'SessionsController', ['only' => ['store', 'destroy']]);
 });
