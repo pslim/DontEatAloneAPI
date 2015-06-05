@@ -105,6 +105,10 @@ class UsersController extends ApiController {
 			$user->name = $name;
 		}
 
+		if ($facebookToken = Input::get('facebook_token')) {
+			$user->facebook_token;
+		}
+
 		if ($imageUrl = Input::get('image_url')) {
 			$user->image_url = $imageUrl;
 		}
