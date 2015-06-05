@@ -20,30 +20,34 @@ class MatchesController extends \BaseController {
 		// TODO: rules in Match, validation(all fields should be filled in)
 		// TODO: figure out security in posting a new match preference
 
-		if (Match::whereUserid(Input::get('userId')) == null) {
+		if (Match::whereUserId(Input::get('user_id')) != null) {
 			return 'User already has already created a match';
 		}
 
 		// Store in database(for now fields can be nullable)
 		$match = new Match;
-		if ($userId = Input::get('userId')) {
-			$match->userId = $userId;
+		if ($userId = Input::get('user_id')) {
+			$match->user_id = $userId;
 		} 
 
-		if ($maxDistance = Input::get('maxDistance')) {
-			$match->maxDistance = $maxDistance;
+		if ($maxDistance = Input::get('max_distance')) {
+			$match->max_distance = $maxDistance;
 		}
 
-		if ($minAge = Input::get('minAge')) {
-			$match->minAge = $minAge;
+		if ($minAge = Input::get('min_age')) {
+			$match->min_age = $minAge;
 		}
 
-		if ($maxAge = Input::get('maxAge')) {
-			$match->maxAge = $maxAge;
+		if ($maxAge = Input::get('max_age')) {
+			$match->max_age = $maxAge;
 		}
 
-		if ($minPrice = Input::get('minPrice')) {
-			$match->minPrice = $minPrice;
+		if ($minPrice = Input::get('min_price')) {
+			$match->min_price = $minPrice;
+		} 
+
+		if ($minPrice = Input::get('max_price')) {
+			$match->min_price = $minPrice;
 		} 
 
 		if ($comment = Input::get('comment')) {
@@ -54,17 +58,17 @@ class MatchesController extends \BaseController {
 			$match->gender = $gender;
 		}
 
-		if ($startTime = Input::get('startTime')) {
-			$match->startTime = $startTime;
+		if ($startTime = Input::get('start_time')) {
+			$match->start_time = $startTime;
 		}
 
-		if ($endTime = Input::get('endTime')) {
-			$match->endTime = $endTime;
+		if ($endTime = Input::get('end_time')) {
+			$match->end_time = $endTime;
 		}
 
 		$match->save();
 
-		$newMatch = Match::whereUserid($userId)->first();
+		$newMatch = Match::whereUserId($userId)->first();
 		return $newMatch;
  	}
 
