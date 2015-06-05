@@ -19,12 +19,6 @@ class CreateUsersTable extends Migration {
 			$table->string('password');
 			$table->char('remember_token', 100)->nullable();
 			$table->string('facebook_token')->nullable();
-			$table->string('name')->nullable();
-			$table->string('image_url')->nullable();
-			$table->char('gender', 1)->nullable();
-			$table->integer('age')->nullable();
-			$table->integer('rating')->nullable();
-			$table->longText('description')->nullable();
 			$table->timestamps();
 
 			//TODO: Figure out which fields we want nullable

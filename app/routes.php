@@ -20,6 +20,7 @@ Route::group(['prefix' => 'api/v1'], function() {
 	Route::resource('users', 'UsersController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 	Route::resource('matches', 'MatchesController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
+	Route::get('/{profile}', 'ProfilesController@show');
 	Route::get('users/{id}/matches', 'MatchesController@index');
 
 	# Authentication

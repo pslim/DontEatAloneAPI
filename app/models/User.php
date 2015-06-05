@@ -9,8 +9,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
-	public $timestamps = false;
-
 	protected $fillable = [
 		'email', 
 		'password',
@@ -43,10 +41,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array('password', 'remember_token', 'facebook_token');
+
+
+	public function profile() {
+		return $this->hasOne('Profile');
+	}
 
 	// public function matches() {
 	// 	return $this->belongsToMany('Match');	//might be belongsToOne
 	// }
-
 }

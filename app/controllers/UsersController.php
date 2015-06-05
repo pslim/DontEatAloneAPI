@@ -46,10 +46,10 @@ class UsersController extends ApiController {
 		}
 
 		$input = Input::all();
-		if (!isset($input['image_url'])) {
-			$faker = Faker\Factory::create();
-			$input['image_url'] = $faker->imageUrl(640, 480, 'cats');
-		}
+		// if (!isset($input['image_url'])) {
+		// 	$faker = Faker\Factory::create();
+		// 	$input['image_url'] = $faker->imageUrl(640, 480, 'cats');
+		// }
 		$user = User::create($input);
 
 		Auth::login($user);
@@ -88,49 +88,49 @@ class UsersController extends ApiController {
 	 * @return Response
 	 */
 	public function update($id) {
-		// Check if user id exists
-		$user = User::whereId($id)->first();
-		if ($user == null) {
-			return 'User does not exist';
-		}
+		// // Check if user id exists
+		// $user = User::whereId($id)->first();
+		// if ($user == null) {
+		// 	return 'User does not exist';
+		// }
 
-		// TODO: Validation
+		// // TODO: Validation
 
-		// Update fields if they were inputted parameters
-		if ($password = Input::get('password')) {
-			$user->password = Hash::make($password);
-		}
+		// // Update fields if they were inputted parameters
+		// if ($password = Input::get('password')) {
+		// 	$user->password = Hash::make($password);
+		// }
 
-		if ($name = Input::get('name')) {
-			$user->name = $name;
-		}
+		// if ($name = Input::get('name')) {
+		// 	$user->name = $name;
+		// }
 
-		if ($facebookToken = Input::get('facebook_token')) {
-			$user->facebook_token;
-		}
+		// if ($facebookToken = Input::get('facebook_token')) {
+		// 	$user->facebook_token;
+		// }
 
-		if ($imageUrl = Input::get('image_url')) {
-			$user->image_url = $imageUrl;
-		}
+		// if ($imageUrl = Input::get('image_url')) {
+		// 	$user->image_url = $imageUrl;
+		// }
 
-		if ($gender = Input::get('gender')) {
-			$user->gender = $gender;
-		}
+		// if ($gender = Input::get('gender')) {
+		// 	$user->gender = $gender;
+		// }
 
-		if ($age = Input::get('age')) {
-			$user->age = $age;
-		}
+		// if ($age = Input::get('age')) {
+		// 	$user->age = $age;
+		// }
 
-		if ($description = Input::get('description')) {
-			$user->description = $description;
-		}
+		// if ($description = Input::get('description')) {
+		// 	$user->description = $description;
+		// }
 
-		$user->save();
+		// $user->save();
 
-		// Return the user we just updated
-		$updatedUser = User::whereId($id)->first();
+		// // Return the user we just updated
+		// $updatedUser = User::whereId($id)->first();
 
-		return $updatedUser;
+		// return $updatedUser;
 	}
 
 

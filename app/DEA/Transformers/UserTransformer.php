@@ -15,12 +15,12 @@ class UserTransformer extends Transformer {
 		return [
 			'id'			=>	$user['id'],
 			'email'			=>	$user['email'],
-			'name'			=>	$user['name'],
-			'image_url'		=>	$user['image_url'],
-			'gender'		=>	$user['gender'],
-			'age'			=>	$user['age'],
-			'rating'		=>	$user['rating'],
-			'description'	=>	$user['description']
+			// 'name'			=>	$user['name'],
+			// 'image_url'		=>	$user['image_url'],
+			// 'gender'		=>	$user['gender'],
+			// 'age'			=>	$user['age'],
+			// 'rating'		=>	$user['rating'],
+			// 'description'	=>	$user['description']
 		];
 	}
 

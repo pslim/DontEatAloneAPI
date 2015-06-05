@@ -16,10 +16,12 @@ class SessionsController extends ApiController {
 			]);
 		}
 
+		$user = User::whereEmail($input['email'])->first();
+
 		return $this->respond([
 			'message' => 'Login successful!',
 			'data' => [
-				'user' => ''
+				'user' => $user
 			]
 		]);
 	}
@@ -33,7 +35,9 @@ class SessionsController extends ApiController {
 	public function destroy($id = null) {
 		Auth::logout();
 
-		return 'Logout successful!';
+		return $this->respond([
+			'message' => 'Logout successful!'
+		]);
 	}
 
 }
