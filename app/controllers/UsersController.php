@@ -2,7 +2,7 @@
 
 use DEA\Transformers\UserTransformer;
 
-class UsersController extends \BaseController {
+class UsersController extends ApiController {
 
 	/**
 	 *	@var DEA\Transformers\UserTransformer
@@ -21,9 +21,9 @@ class UsersController extends \BaseController {
 	public function index() {
 		$users = User::all();
 
-		return Response::json([
+		return $this->respond([
 			'data' => $this->userTransformer->transformCollection($users->all())
-		], 200);
+		]);
 	}
 
 	/**
@@ -65,16 +65,12 @@ class UsersController extends \BaseController {
 
 		// user does not exist
 		if (!$user) {
-			return Response::json([
-				'error'	=>	[
-					'message'	=>	'User does not exist'
-				]
-			], 404);
+			return $this->respondNotFound('User does not exist.');
 		}
 
-		return Response::json([
+		return $this->respond([
 			'data'	=>	$this->userTransformer->transform($user)
-		], 200);
+		]);
 	}
 
 	/**
