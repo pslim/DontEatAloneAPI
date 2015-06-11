@@ -19,9 +19,10 @@ Route::get('/', function()
 Route::group(['prefix' => 'api/v1'], function() {
 	Route::resource('users', 'UsersController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 	Route::resource('matches', 'MatchesController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+	Route::resource('profiles', 'ProfilesController', ['only' => ['index', 'update', 'destroy']]);
 
-	Route::get('/{profile}', 'ProfilesController@show');
-	Route::get('users/{id}/matches', 'MatchesController@index');
+	Route::get('/{email}', ['as' => 'profile', 'uses' => 'ProfilesController@show']);
+	Route::get('users/{userId}/matches', 'MatchesController@matchesForUser');
 
 	# Authentication
 	Route::get('login', ['as' => 'login', 'uses' => 'SessionsController@store']);

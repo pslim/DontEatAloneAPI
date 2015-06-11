@@ -1,39 +1,32 @@
 <?php
 
-class ProfilesController extends \BaseController {
+use DEA\Forms\ProfileForm;
+
+class ProfilesController extends ApiController {
+
+	protected $profileForm;
+
+	function __construct (ProfileForm $profileForm) {
+		$this->profileForm = $profileForm;
+
+		// $this->beforeFilter('currentUser', ['only' => ['update', 'destroy']]);
+	}
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
-	{
-		//
+	public function index() {
+		$limit = Input::get('limit') ? : 30;
+		$users = User::with('profile')->paginate($limit);
+
+		return $this->respondWithPagination($users, [
+			'data' => [
+				'users' => $users->all()
+			]
+		]);
 	}
-
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
 
 	/**
 	 * Display the specified resource.
@@ -43,21 +36,13 @@ class ProfilesController extends \BaseController {
 	 */
 	public function show($email) {
 		$user = User::with('profile')->whereEmail($email)->firstOrFail();
-		return $user;
+
+		return $this->respond([
+			'data'	=>	[
+				'user' => $user
+			]
+		]);
 	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
 
 	/**
 	 * Update the specified resource in storage.
@@ -65,9 +50,20 @@ class ProfilesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
+	public function update($email) {
+		$user = User::whereEmail($email)->firstOrFail();
+		$input = Input::only('name', 'image_url', 'gender', 'age', 'description');
+
+		$this->profileForm->validate($input);
+
+		$user->profile->fill($input)->save();
+
+		return $this->respond([
+			'message' => 'User\'s profile successfully updated.', 
+			'data' => [
+				'user' => $user
+			]
+		]);
 	}
 
 
@@ -77,8 +73,7 @@ class ProfilesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		//
 	}
 

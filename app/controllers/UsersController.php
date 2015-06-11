@@ -51,6 +51,8 @@ class UsersController extends ApiController {
 		// 	$input['image_url'] = $faker->imageUrl(640, 480, 'cats');
 		// }
 		$user = User::create($input);
+		// $input['user_id'] = $user->id;
+		// $profile = Profile::create($input);
 
 		Auth::login($user);
 
@@ -77,7 +79,9 @@ class UsersController extends ApiController {
 
 		return $this->respond([
 			// 'data'	=>	$this->userTransformer->transform($user)
-			'data'	=>	$user
+			'data'	=>	[
+				'user' => $user
+			]
 		]);
 	}
 

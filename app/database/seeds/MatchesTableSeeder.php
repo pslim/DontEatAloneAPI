@@ -9,7 +9,7 @@ class MatchesTableSeeder extends Seeder {
 		$faker = Faker\Factory::create();
 		$faker->seed(1234);
 
-		for ( $i = 0; $i < 200; $i++ ) {
+		for ( $i = 1; $i < 200; $i++ ) {
 			Match::create([
 				'user_id'		=>	$i,
 				'max_distance'	=>	$faker->numberBetween(0, 500),

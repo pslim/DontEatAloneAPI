@@ -8,6 +8,14 @@ class Profile extends Eloquent {
 	 */
 	protected $table = 'profiles';
 
+	protected $fillable = [
+		'name',
+		'image_url',
+		'gender',
+		'age',
+		'description'
+	];
+
 	public function user() {
 		return $this->belongsTo('User');
 	}

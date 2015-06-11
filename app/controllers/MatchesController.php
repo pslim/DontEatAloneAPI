@@ -1,19 +1,19 @@
 <?php
 
-// use DEA\Transformers\MatchTransformer;
+use DEA\Transformers\MatchTransformer;
 
 class MatchesController extends ApiController {
 
 	/**
 	 * @var DEA\Transformers\MatchTransformer
 	 */
-	// protected $matchTransformer;
+	protected $matchTransformer;
 
-	// function __construct(MatchTransformer $matchTransformer) {
-	// 	$this->matchTransformer = $matchTransformer;
+	function __construct(MatchTransformer $matchTransformer) {
+		$this->matchTransformer = $matchTransformer;
 
-		// $this->beforeFilter('auth.basic', ['on' => 'post']);		This is not working
-	// }
+		$this->beforeFilter('auth.basic', ['on' => 'post']);
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -21,17 +21,14 @@ class MatchesController extends ApiController {
 	 * @param null $id
 	 * @return Response
 	 */
-	public function index($userId = null) {
+	public function index() {
 		$limit = Input::get('limit') ? : 30;
 		// TODO: max limit that the client can retrieve
-		// TODO:
 		// findOrFail gives 'Resource not found' if fails
-		// $matches = $userId ? User::findOrFail($userId)->matches : Match::all();	change to limits
-		$matches = Match::paginate($limit);
+		$matches = Match::with('user.profile')->paginate($limit);
 
 		return $this->respondWithPagination($matches, [
-			// 'data' => $this->matchTransformer->transformCollection($matches->all())
-			'data' => $matches->all()
+			'data' => $this->matchTransformer->transformCollection($matches->all())
 		]);
 	}
 
@@ -126,6 +123,22 @@ class MatchesController extends ApiController {
 	 */
 	public function destroy($id) {
 		//
+	}
+
+	public function matchesForUser($userId) {
+		// $match = Match::whereUserId($userId)->first();
+		// $maxDistance = $match->max_distance;
+		// TODO HERE
+
+
+		$limit = Input::get('limit') ? : 30;
+		$matches = Match::with('user.profile')->paginate($limit);
+
+		return $this->respondWithPagination($matches, [
+			'data' => [
+				'matches' => $matches->all()
+			]
+		]);
 	}
 
 

@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => false,
+	'debug' => true,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +26,8 @@ return array(
 	|
 	*/
 
-	'url' => 'http://www.donteatalone.paigelim.com',
+	// 'url' => 'http://www.donteatalone.paigelim.com',
+	'url' => 'http://dea1.paigelim.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -121,6 +122,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+		'Laracasts\Validation\ValidationServiceProvider',
 
 	),
 

@@ -48,7 +48,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasOne('Profile');
 	}
 
-	// public function matches() {
-	// 	return $this->belongsToMany('Match');	//might be belongsToOne
-	// }
+	public function matches() {
+		return $this->hasMany('Match');	//might be belongsToOne
+	}
 }

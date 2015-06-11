@@ -9,4 +9,21 @@ class Match extends Eloquent {
 	 * @var string
 	 */
 	protected $table = 'matches';
+
+	protected $fillable = [
+		'user_id',
+		'max_distance',
+		'min_age',
+		'max_age',
+		'min_price',
+		'max_price',
+		'comment',
+		'gender',
+		'start_time',
+		'end_time'
+	];
+
+	public function user() {
+		return $this->belongsTo('User');
+	}
 }
