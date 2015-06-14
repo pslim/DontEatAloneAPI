@@ -46,6 +46,7 @@ class UsersController extends ApiController {
 
 		$userData = Input::only('email', 'password', 'password_confirmation');
 		$this->userForm->validate($userData);
+		$userData['password'] = Hash::make($userData['password']);
 
 		$user = User::create($userData);
 		$profileData = Input::only('name', 'image_url', 'gender', 'age', 'description', 'user_id');
