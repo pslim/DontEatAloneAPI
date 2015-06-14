@@ -12,15 +12,20 @@ class UserTransformer extends Transformer {
 	 * @return array
 	 */
 	public function transform($user) {
+		$profile = $user->profile;
+
 		return [
 			'id'			=>	$user['id'],
 			'email'			=>	$user['email'],
-			// 'name'			=>	$user['name'],
-			// 'image_url'		=>	$user['image_url'],
-			// 'gender'		=>	$user['gender'],
-			// 'age'			=>	$user['age'],
-			// 'rating'		=>	$user['rating'],
-			// 'description'	=>	$user['description']
+			'profile' => [
+				'id'			=>	$profile['id'],
+				'user_id' 		=>	$profile['user_id'],
+				'name'			=>	$profile['name'],
+				'image_url'		=>	$profile['image_url'],
+				'gender'		=>	$profile['gender'],
+				'age'			=>	$profile['age'],
+				'description'	=>	$profile['description']
+			]
 		];
 	}
 

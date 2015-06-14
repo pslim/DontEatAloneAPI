@@ -27,9 +27,9 @@ class MatchTransformer extends Transformer {
 			'gender'		=>	$match['gender'],
 			'start_time'	=>	$match['start_time'],
 			'end_time'		=>	$match['end_time'],
-			'user'  		=> [
-				'id' 		=>	$user['id'],
-				'email' 	=>	$user['email'],
+			// 'user'  		=> [
+			// 	'id' 		=>	$user['id'],
+			// 	'email' 	=>	$user['email'],
 				'profile' 	=>	[
 					'id' 		=>	$profile['id'],
 					'user_id' 	=>	$profile['user_id'],
@@ -38,7 +38,7 @@ class MatchTransformer extends Transformer {
 					'gender' 	=>	$profile['gender'],
 					'rating' 	=>	$profile['rating']
 				]
-			]
+			// ]
 		];
 	}
 

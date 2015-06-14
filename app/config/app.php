@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,8 +26,8 @@ return array(
 	|
 	*/
 
-	// 'url' => 'http://www.donteatalone.paigelim.com',
-	'url' => 'http://dea1.paigelim.com',
+	'url' => 'http://www.donteatalone.paigelim.com',
+	// 'url' => 'http://dea1.paigelim.com',
 
 	/*
 	|--------------------------------------------------------------------------

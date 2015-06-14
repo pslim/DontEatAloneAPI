@@ -1,6 +1,7 @@
 <?php
 
 use DEA\Transformers\MatchTransformer;
+use DEA\Forms\MatchForm;
 
 class MatchesController extends ApiController {
 
@@ -9,10 +10,17 @@ class MatchesController extends ApiController {
 	 */
 	protected $matchTransformer;
 
-	function __construct(MatchTransformer $matchTransformer) {
-		$this->matchTransformer = $matchTransformer;
+	/**
+	 * @var DEA\Forms\MatchForm
+	 */
+	protected $matchForm;
 
-		$this->beforeFilter('auth.basic', ['on' => 'post']);
+
+	function __construct(MatchTransformer $matchTransformer, MatchForm $matchForm) {
+		$this->matchTransformer = $matchTransformer;
+		$this->matchForm = $matchForm;
+
+		// $this->beforeFilter('auth.basic', ['on' => 'post']);
 	}
 
 	/**
@@ -24,11 +32,10 @@ class MatchesController extends ApiController {
 	public function index() {
 		$limit = Input::get('limit') ? : 30;
 		// TODO: max limit that the client can retrieve
-		// findOrFail gives 'Resource not found' if fails
 		$matches = Match::with('user.profile')->paginate($limit);
 
 		return $this->respondWithPagination($matches, [
-			'data' => $this->matchTransformer->transformCollection($matches->all())
+			'matches' => $this->matchTransformer->transformCollection($matches->all())
 		]);
 	}
 
@@ -41,11 +48,15 @@ class MatchesController extends ApiController {
 		// TODO: rules in Match, validation(all fields should be filled in)
 		// TODO: figure out security in posting a new match preference
 
-		if (Match::whereUserId(Input::get('user_id')) != null) {
-			return 'User already has already created a match';
-		}
+		// if (Match::whereUserId(Input::get('user_id')) != null) {
+		// 	return 'User has already created a match';
+		// }
 
 		// Store in database(for now fields can be nullable)
+		if (!$this->matchForm->validate(Input::all())) {
+			return 'failed validation';
+		}
+
 		$match = new Match;
 		if ($userId = Input::get('user_id')) {
 			$match->user_id = $userId;
@@ -68,7 +79,7 @@ class MatchesController extends ApiController {
 		} 
 
 		if ($minPrice = Input::get('max_price')) {
-			$match->min_price = $minPrice;
+			$match->max_price = $minPrice;
 		} 
 
 		if ($comment = Input::get('comment')) {
@@ -89,8 +100,13 @@ class MatchesController extends ApiController {
 
 		$match->save();
 
-		$newMatch = Match::whereUserId($userId)->first();
-		return $newMatch;
+		return $this->respondCreated('Match successfully created.', [
+			'match' => $match
+		]);
+
+
+		// $newMatch = Match::whereUserId($userId)->first();
+		// return $newMatch;
  	}
 
 
@@ -125,21 +141,55 @@ class MatchesController extends ApiController {
 		//
 	}
 
-	public function matchesForUser($userId) {
-		// $match = Match::whereUserId($userId)->first();
-		// $maxDistance = $match->max_distance;
-		// TODO HERE
+    // Retrieved from http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
+	public function getDistanceInKm($lat1, $long1, $lat2, $long2) {
+		$R = 6371;	// Radius of the earth in km
+		$dLat = $this->degToRad($lat2 - $lat1);
+		$dLong = $this->degToRad($long2 - $long1);
+		$a = 
+			sin($dLat/2) * sin($dLat/2) + 
+			cos($this->degToRad($lat1)) * cos($this->degToRad($lat2)) *
+			sin($dLong/2) * sin($dLong/2);
 
-
-		$limit = Input::get('limit') ? : 30;
-		$matches = Match::with('user.profile')->paginate($limit);
-
-		return $this->respondWithPagination($matches, [
-			'data' => [
-				'matches' => $matches->all()
-			]
-		]);
+		$c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+		$d = $R * $c;	// Distance in km
+		return $d;
 	}
 
+	public function degToRad($deg) {
+		return $deg * (M_PI/180);
+	}
 
+	public function matchesForUser($userId) {
+		$preference = Match::whereUserId($userId)->first();
+
+		$lat = $preference->latitude;
+		$long = $preference->longitude;
+		$maxDistance = $preference->max_distance;
+		$minAge = $preference->min_age;
+		$maxAge = $preference->max_age;
+		$minPrice = $preference->min_price;
+		$maxPrice = $preference->max_price;
+		$gender = $preference->gender;
+		$start_time = $preference->start_time;
+		$end_time = $preference->end_time;
+
+		$limit = Input::get('limit') ? : 15;
+
+		$matches = Match::with('user.profile')
+				->join('profiles','matches.user_id', '=', 'profiles.user_id')
+				->where('profiles.age', '>=', $minAge)
+				->where('profiles.age', '<=', $maxAge)
+				->where('matches.min_price', '>=', $minPrice)
+				->where('matches.max_price', '<=', $maxPrice)
+				->where('profiles.gender', '=', $gender)
+				->where('matches.start_time', '>=', $start_time)
+				->where('matches.end_time', '<=', $end_time)
+				->paginate($limit);
+
+		return $this->respondWithPagination($matches, [
+			'preference' => $this->matchTransformer->transform($preference),
+			'matches' => $this->matchTransformer->transformCollection($matches->all())
+		]);
+	}
 }

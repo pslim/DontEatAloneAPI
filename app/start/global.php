@@ -52,8 +52,20 @@ App::error(function(Exception $exception, $code)
 });
 
 App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
-	return Response::json(['error' => ['message' => 'Resource not found']], 404);
+	return Response::json([
+		'error' => [
+			'message' => 'Resource not found'
+		]
+	], 404);
 });
+
+App::error(function(Laracasts\Validation\FormValidationException $exception, $code) {
+	return Response::json([
+		'message' => 'There were validation errors',
+		'errors' => $exception->getErrors()
+	], 422);
+});
+
 
 /*
 |--------------------------------------------------------------------------

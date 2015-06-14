@@ -22,9 +22,7 @@ class ProfilesController extends ApiController {
 		$users = User::with('profile')->paginate($limit);
 
 		return $this->respondWithPagination($users, [
-			'data' => [
-				'users' => $users->all()
-			]
+			'users' => $users->all()
 		]);
 	}
 
@@ -38,9 +36,7 @@ class ProfilesController extends ApiController {
 		$user = User::with('profile')->whereEmail($email)->firstOrFail();
 
 		return $this->respond([
-			'data'	=>	[
-				'user' => $user
-			]
+			'user' => $user
 		]);
 	}
 

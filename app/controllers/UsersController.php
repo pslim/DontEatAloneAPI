@@ -1,17 +1,25 @@
 <?php
 
-// use DEA\Transformers\UserTransformer;
+use DEA\Transformers\UserTransformer;
+use DEA\Forms\UserForm;
+use DEA\Forms\ProfileForm;
 
 class UsersController extends ApiController {
 
 	/**
 	 * @var DEA\Transformers\UserTransformer
 	 */
-	// protected $userTransformer;
+	protected $userTransformer;
 
-	// function __construct(UserTransformer $userTransformer) {
-	// 	$this->userTransformer = $userTransformer;
-	// }
+	protected $userForm;
+
+	protected $profileForm;
+
+	function __construct(UserTransformer $userTransformer, UserForm $userForm, ProfileForm $profileForm) {
+		$this->userTransformer = $userTransformer;
+		$this->userForm = $userForm;
+		$this->profileForm = $profileForm;
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -25,10 +33,7 @@ class UsersController extends ApiController {
 		$users = User::paginate($limit);
 
 		return $this->respondWithPagination($users, [
-			// 'data' => $this->userTransformer->transformCollection($users->all())
-			'data' => [
-				'users' => $users->all()
-			]
+			'users' => $this->userTransformer->transformCollection($users->all())
 		]);
 	}
 
@@ -39,27 +44,44 @@ class UsersController extends ApiController {
 	 */
 	public function store() {
 
-		// Validation
-		$validator = Validator::make(Input::all(), User::$rules);
-		if ($validator->fails()) {
-			return $this->respondCreateError('Parameters failed validation for a user.');
+		$userData = Input::only('email', 'password', 'password_confirmation');
+		$this->userForm->validate($userData);
+
+		$user = User::create($userData);
+		$profileData = Input::only('name', 'image_url', 'gender', 'age', 'description', 'user_id');
+		$this->profileForm->validate($profileData);
+
+		$profileData['user_id'] = $user->id;
+		$profile = new Profile();
+		$profile->user_id = $profileData['user_id'];
+
+		if (isset($input['name'])) {
+			$profile->name = $input['name'];
 		}
 
-		$input = Input::all();
-		// if (!isset($input['image_url'])) {
-		// 	$faker = Faker\Factory::create();
-		// 	$input['image_url'] = $faker->imageUrl(640, 480, 'cats');
-		// }
-		$user = User::create($input);
-		// $input['user_id'] = $user->id;
-		// $profile = Profile::create($input);
+		if (isset($input['image_url'])) {
+			$profile->image_url = $input['image_url'];
+		}
 
+		if (isset($input['gender'])) {
+			$profile->gender = $input['gender'];
+		}
+
+		if (isset($input['age'])) {
+			$profile->age = $input['age'];
+		}
+
+		if (isset($input['description'])) {
+			$profile->description = $input['description'];
+		}
+
+		$profile->save();
 		Auth::login($user);
 
+		$user = User::with('profile')->whereId($profile['user_id'])->first();
 		return $this->respondCreated('User successfully created.', [
-			'data' => [
-				'user' => $user
-			]
+			'user'	=> $user
+			// 'user' => $this->userTransformer->transform($user)
 		]);
 	}
 
@@ -71,17 +93,15 @@ class UsersController extends ApiController {
 	 * @return Response
 	 */
 	public function show($id) {
-		$user = User::find($id);
+		$user = User::with('profile')->find($id);
 
 		if (!$user) {
 			return $this->respondNotFound('User does not exist.');
 		}
 
 		return $this->respond([
-			// 'data'	=>	$this->userTransformer->transform($user)
-			'data'	=>	[
-				'user' => $user
-			]
+			// 'user' => $this->userTransformer->transform($user)
+			'user'	=>	$user
 		]);
 	}
 
@@ -93,12 +113,7 @@ class UsersController extends ApiController {
 	 */
 	public function update($id) {
 		// // Check if user id exists
-		// $user = User::whereId($id)->first();
-		// if ($user == null) {
-		// 	return 'User does not exist';
-		// }
-
-		// // TODO: Validation
+		$user = User::whereId($id)->firstOrFail();
 
 		// // Update fields if they were inputted parameters
 		// if ($password = Input::get('password')) {

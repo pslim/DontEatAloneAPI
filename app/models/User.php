@@ -19,16 +19,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'description'
 	];
 
-	public static $rules = [
-		'email'		=>	'required',	//TODO: check if email
-		'password'	=>	'required'
-	];
-
-	// TODO:
-	public static $updatedRules = [
-	
-	];
-
 	/**
 	 * The database table used by the model.
 	 *
