@@ -45,68 +45,28 @@ class MatchesController extends ApiController {
 	 * @return Response
 	 */
 	public function store() {
-		// TODO: rules in Match, validation(all fields should be filled in)
-		// TODO: figure out security in posting a new match preference
 
-		// if (Match::whereUserId(Input::get('user_id')) != null) {
-		// 	return 'User has already created a match';
-		// }
+		$input = Input::only(
+			'user_id', 
+			'longitude',
+			'latitude',
+			'max_distance', 
+			'min_age', 
+			'max_age', 
+			'min_price', 
+			'max_price', 
+			'start_time',
+			'end_time',
+			'comment', 
+			'gender'
+		);
 
-		// Store in database(for now fields can be nullable)
-		if (!$this->matchForm->validate(Input::all())) {
-			return 'failed validation';
-		}
-
-		$match = new Match;
-		if ($userId = Input::get('user_id')) {
-			$match->user_id = $userId;
-		} 
-
-		if ($maxDistance = Input::get('max_distance')) {
-			$match->max_distance = $maxDistance;
-		}
-
-		if ($minAge = Input::get('min_age')) {
-			$match->min_age = $minAge;
-		}
-
-		if ($maxAge = Input::get('max_age')) {
-			$match->max_age = $maxAge;
-		}
-
-		if ($minPrice = Input::get('min_price')) {
-			$match->min_price = $minPrice;
-		} 
-
-		if ($minPrice = Input::get('max_price')) {
-			$match->max_price = $minPrice;
-		} 
-
-		if ($comment = Input::get('comment')) {
-			$match->comment = $comment;
-		}
-
-		if ($gender = Input::get('gender')) {
-			$match->gender = $gender;
-		}
-
-		if ($startTime = Input::get('start_time')) {
-			$match->start_time = $startTime;
-		}
-
-		if ($endTime = Input::get('end_time')) {
-			$match->end_time = $endTime;
-		}
-
-		$match->save();
+		$this->matchForm->validate($input);
+		$match = Match::create($input);
 
 		return $this->respondCreated('Match successfully created.', [
 			'match' => $match
 		]);
-
-
-		// $newMatch = Match::whereUserId($userId)->first();
-		// return $newMatch;
  	}
 
 
@@ -117,7 +77,11 @@ class MatchesController extends ApiController {
 	 * @return Response
 	 */
 	public function show($id) {
-		return Match::whereId($id)->first();
+		$match = Match::with('user.profile')->findOrFail($id);
+
+		return $this->respond([
+			'match'	=> $this->matchTransformer->transform($match)
+		]);
 	}
 
 	/**
@@ -138,7 +102,11 @@ class MatchesController extends ApiController {
 	 * @return Response
 	 */
 	public function destroy($id) {
-		//
+		$match = Match::findOrFail($id);
+
+		$match->delete();
+
+		return $this->respondDeleted('Match has been successfully deleted.');
 	}
 
     // Retrieved from http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points
@@ -161,7 +129,7 @@ class MatchesController extends ApiController {
 	}
 
 	public function matchesForUser($userId) {
-		$preference = Match::whereUserId($userId)->first();
+		$preference = Match::whereUserId($userId)->firstOrFail();
 
 		$lat = $preference->latitude;
 		$long = $preference->longitude;
@@ -185,8 +153,9 @@ class MatchesController extends ApiController {
 				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
+				->orderBy('profiles.rating')
 				->paginate($limit);
-
+				
 		return $this->respondWithPagination($matches, [
 			'preference' => $this->matchTransformer->transform($preference),
 			'matches' => $this->matchTransformer->transformCollection($matches->all())

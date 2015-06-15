@@ -46,8 +46,8 @@ class ProfilesController extends ApiController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($email) {
-		$user = User::whereEmail($email)->firstOrFail();
+	public function update($userId) {
+		$user = User::findOrFail($userId);//->firstOrFail();
 		$input = Input::only('name', 'image_url', 'gender', 'age', 'description');
 
 		$this->profileForm->validate($input);
@@ -73,5 +73,26 @@ class ProfilesController extends ApiController {
 		//
 	}
 
+	public function likeUserId($userId) {
+		$profile = Profile::whereUserId($userId)->firstOrFail();
+
+		$profile->likes = $profile->likes + 1;
+		$profile->save();
+
+		return $this->respond([
+			'message' => 'User\'s rating has been updated.'
+		]);
+	}
+
+	public function dislikeUserId($userId) {
+		$profile = Profile::whereUserId($userId)->firstOrFail();
+
+		$profile->dislikes = $profile->dislikes + 1;
+		$profile->save();
+
+		return $this->respond([
+			'message' => 'User\'s rating has been updated.'
+		]);
+	}
 
 }

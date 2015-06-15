@@ -17,6 +17,7 @@ class MatchTransformer extends Transformer {
 		$profile = $user['profile'];
 
 		return [
+			'id'			=>	$match['id'],
 			'user_id'		=>	$match['user_id'],
 			'max_distance'	=>	$match['max_distance'],
 			'min_age'		=>	$match['min_age'],
@@ -27,9 +28,6 @@ class MatchTransformer extends Transformer {
 			'gender'		=>	$match['gender'],
 			'start_time'	=>	$match['start_time'],
 			'end_time'		=>	$match['end_time'],
-			// 'user'  		=> [
-			// 	'id' 		=>	$user['id'],
-			// 	'email' 	=>	$user['email'],
 				'profile' 	=>	[
 					'id' 		=>	$profile['id'],
 					'user_id' 	=>	$profile['user_id'],
