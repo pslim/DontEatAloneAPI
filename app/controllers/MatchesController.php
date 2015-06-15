@@ -138,7 +138,11 @@ class MatchesController extends ApiController {
 	 * @return Response
 	 */
 	public function destroy($id) {
-		//
+		$match = Match::findOrFail($id);
+
+		$match->delete();
+
+		return $this->respondDeleted('Match has been successfully deleted.');
 	}
 
     // Retrieved from http://stackoverflow.com/questions/27928/how-do-i-calculate-distance-between-two-latitude-longitude-points

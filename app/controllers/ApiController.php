@@ -95,6 +95,12 @@ class ApiController extends BaseController {
 		return $this->setStatusCode(IlluminateResponse::HTTP_CREATED)->respond($data);
 	}
 
+	protected function respondDeleted($message) {
+		return $this->respond([
+			'message' => $message
+		]);
+	}
+
 	/**
 	 * @param string $message
 	 * @return mixed
