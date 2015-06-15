@@ -46,8 +46,8 @@ class ProfilesController extends ApiController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($email) {
-		$user = User::whereEmail($email)->firstOrFail();
+	public function update($userId) {
+		$user = User::findOrFail($userId);//->firstOrFail();
 		$input = Input::only('name', 'image_url', 'gender', 'age', 'description');
 
 		$this->profileForm->validate($input);

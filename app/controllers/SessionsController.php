@@ -9,7 +9,6 @@ class SessionsController extends ApiController {
 	 */
 	public function store() {
 		$input = Input::only('email', 'password');
-
 		if (!Auth::attempt($input)) {
 			return $this->respond([
 				'message' => 'Login failed!'
