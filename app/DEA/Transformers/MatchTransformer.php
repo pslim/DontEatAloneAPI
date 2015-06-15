@@ -34,7 +34,8 @@ class MatchTransformer extends Transformer {
 					'name' 		=>	$profile['name'],
 					'image_url' =>	$profile['image_url'],
 					'gender' 	=>	$profile['gender'],
-					'rating' 	=>	$profile['rating']
+					'likes'		=>	$profile['likes'],
+					'dislikes'	=>	$profile['dislikes']
 				]
 			// ]
 		];

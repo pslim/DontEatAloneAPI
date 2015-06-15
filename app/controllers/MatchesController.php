@@ -153,9 +153,9 @@ class MatchesController extends ApiController {
 				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
-				->orderBy('profiles.rating')
+				->orderBy('profiles.likes')
 				->paginate($limit);
-				
+
 		return $this->respondWithPagination($matches, [
 			'preference' => $this->matchTransformer->transform($preference),
 			'matches' => $this->matchTransformer->transformCollection($matches->all())
