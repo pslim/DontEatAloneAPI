@@ -55,6 +55,8 @@ class MatchesController extends ApiController {
 			'max_age', 
 			'min_price', 
 			'max_price', 
+			'start_time',
+			'end_time',
 			'comment', 
 			'gender'
 		);
