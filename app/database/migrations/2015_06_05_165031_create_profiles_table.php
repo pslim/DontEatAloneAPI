@@ -18,7 +18,8 @@ class CreateProfilesTable extends Migration {
 			$table->string('image_url')->nullable();
 			$table->char('gender', 1)->nullable();
 			$table->integer('age')->nullable();
-			$table->integer('rating')->nullable();
+			$table->integer('likes')->nullable();
+			$table->integer('dislikes')->nullable();
 			$table->longText('description')->nullable();
 			$table->timestamps();
 		});

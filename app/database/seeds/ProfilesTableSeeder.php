@@ -15,7 +15,8 @@ class ProfilesTableSeeder extends Seeder {
 				'image_url'		=>	$faker->imageUrl(640, 480, 'cats'),
 				'gender'		=>	$faker->randomElement(['M', 'F']),
 				'age'			=>	$faker->numberBetween(10, 60),
-				'rating'		=>	$faker->numberBetween(0, 100),
+				'likes'			=>	$faker->numberBetween(0, 100),
+				'dislikes'		=>	$faker->numberBetween(0, 100),
 				'description'	=>	$faker->paragraph(3)
 			]);
 		}
