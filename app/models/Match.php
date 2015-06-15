@@ -12,6 +12,8 @@ class Match extends Eloquent {
 
 	protected $fillable = [
 		'user_id',
+		'latitude',
+		'longitude',
 		'max_distance',
 		'min_age',
 		'max_age',

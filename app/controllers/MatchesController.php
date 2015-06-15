@@ -45,7 +45,7 @@ class MatchesController extends ApiController {
 	 * @return Response
 	 */
 	public function store() {
-		
+
 		$input = Input::only(
 			'user_id', 
 			'longitude',
@@ -127,7 +127,7 @@ class MatchesController extends ApiController {
 	}
 
 	public function matchesForUser($userId) {
-		$preference = Match::whereUserId($userId)->first();
+		$preference = Match::whereUserId($userId)->firstOrFail();
 
 		$lat = $preference->latitude;
 		$long = $preference->longitude;
@@ -151,8 +151,9 @@ class MatchesController extends ApiController {
 				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
+				->orderBy('profiles.rating')
 				->paginate($limit);
-
+				
 		return $this->respondWithPagination($matches, [
 			'preference' => $this->matchTransformer->transform($preference),
 			'matches' => $this->matchTransformer->transformCollection($matches->all())
