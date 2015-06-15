@@ -73,5 +73,26 @@ class ProfilesController extends ApiController {
 		//
 	}
 
+	public function likeUserId($userId) {
+		$profile = Profile::whereUserId($userId)->firstOrFail();
+
+		$profile->likes = $profile->likes + 1;
+		$profile->save();
+
+		return $this->respond([
+			'message' => 'User\'s rating has been updated.'
+		]);
+	}
+
+	public function dislikeUserId($userId) {
+		$profile = Profile::whereUserId($userId)->firstOrFail();
+
+		$profile->dislikes = $profile->dislikes + 1;
+		$profile->save();
+
+		return $this->respond([
+			'message' => 'User\'s rating has been updated.'
+		]);
+	}
 
 }

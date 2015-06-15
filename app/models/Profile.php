@@ -13,7 +13,9 @@ class Profile extends Eloquent {
 		'image_url',
 		'gender',
 		'age',
-		'description'
+		'description',
+		'like',
+		'dislike'
 	];
 
 	public function user() {

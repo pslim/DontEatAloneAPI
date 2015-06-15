@@ -23,6 +23,8 @@ Route::group(['prefix' => 'api/v1'], function() {
 
 	// Route::get('/{email}', ['as' => 'profile', 'uses' => 'ProfilesController@show']);
 	Route::get('users/{userId}/matches', 'MatchesController@matchesForUser');
+	Route::post('users/{userId}/like', 'ProfilesController@likeUserId');
+	Route::post('users/{userId}/dislike', 'ProfilesController@dislikeUserId');
 
 	# Authentication
 	Route::get('login', ['as' => 'login', 'uses' => 'SessionsController@store']);
