@@ -16,7 +16,7 @@ class MatchTransformer extends Transformer {
 		$user = $match['user'];
 		$profile = $user['profile'];
 
-		return [
+		$data = [
 			'id'			=>	$match['id'],
 			'user_id'		=>	$match['user_id'],
 			'max_distance'	=>	$match['max_distance'],
@@ -40,8 +40,13 @@ class MatchTransformer extends Transformer {
 					'likes'		=>	$profile['likes'],
 					'dislikes'	=>	$profile['dislikes']
 				]
-			// ]
 		];
+
+		if ($data['distance'] == null) {
+			unset($data['distance']);
+		}
+
+		return $data;
 	}
 
 }
