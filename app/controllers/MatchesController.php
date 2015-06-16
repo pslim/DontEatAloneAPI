@@ -144,19 +144,22 @@ class MatchesController extends ApiController {
 
 		$limit = Input::get('limit') ? : 15;
 
-		$matches = Match::with('user.profile')
+		$query = Match::with('user.profile')
 				->join('profiles','matches.user_id', '=', 'profiles.user_id')
 				->where('profiles.age', '>=', $minAge)
 				->where('profiles.age', '<=', $maxAge)
 				->where('matches.min_price', '>=', $minPrice)
 				->where('matches.max_price', '<=', $maxPrice)
-				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
-				->where('matches.user_id', '<>', $userId)
-				->orderBy('profiles.likes', 'DESC')
-				// ->paginate($limit);
-				->get();
+				->where('matches.user_id', '<>', $userId);
+
+		if ($gender != 'N') {
+			$query = $query->where('profiles.gender', '=', $gender)
+							->orderBy('profiles.likes', 'DESC');
+		}
+
+		$matches = $query->get();
 
 		foreach($matches as $index => $match) {
 			$distance = $this->getDistanceInKm($lat, $long, $match->latitude, $match->longitude);
@@ -168,14 +171,15 @@ class MatchesController extends ApiController {
 			}
 		}
 
+
 		// $matches->setItems($matches->getCollection());
 		// dd($matches->getTotal());
 		// $paginator = Paginator::make($matches->all(), $matches->count(), $limit);
 		// $paginator->paginate($limit);
 
-		// return $this->respondWithPagination($paginator, [
+		// return $this->respondWithPagination($matches, [
 		// 	'preference' => $this->matchTransformer->transform($preference),
-		// 	'matches' => $this->matchTransformer->transformCollection($paginator->all())
+		// 	'matches' => $this->matchTransformer->transformCollection($matches->all())
 		// ]);
 
 		// TODO: Fix pagination
