@@ -12,8 +12,8 @@ class MatchForm extends FormValidator {
 
 	protected $rules = [
 		'user_id'		=>	'required|exists:users,id|unique:matches',
-		// 'longitude'		=>	'',
-		// 'latitude'		=>	'',
+		'longitude'		=>	'required',
+		'latitude'		=>	'required',
 		'max_distance'	=>	'required|integer|min:0',
 		'min_age'		=>	'required|integer|min:0|max:120',
 		'max_age'		=>	'required|integer|min:0|max:120',	//TODO: Create custom validation rule for 'greater_than'
