@@ -153,12 +153,38 @@ class MatchesController extends ApiController {
 				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
-				->orderBy('profiles.likes')
-				->paginate($limit);
+				->where('matches.user_id', '<>', $userId)
+				->orderBy('profiles.likes', 'DESC')
+				// ->paginate($limit);
+				->get();
 
-		return $this->respondWithPagination($matches, [
-			'preference' => $this->matchTransformer->transform($preference),
-			'matches' => $this->matchTransformer->transformCollection($matches->all())
+		foreach($matches as $index => $match) {
+			$distance = $this->getDistanceInKm($lat, $long, $match->latitude, $match->longitude);
+
+			if ($distance > $maxDistance || $distance > $match->max_distance) {
+				unset($matches[$index]);
+			} else {
+				$match->distance = $distance;
+			}
+		}
+
+		// $matches->setItems($matches->getCollection());
+		// dd($matches->getTotal());
+		// $paginator = Paginator::make($matches->all(), $matches->count(), $limit);
+		// $paginator->paginate($limit);
+
+		// return $this->respondWithPagination($paginator, [
+		// 	'preference' => $this->matchTransformer->transform($preference),
+		// 	'matches' => $this->matchTransformer->transformCollection($paginator->all())
+		// ]);
+
+		// TODO: Fix pagination
+		return $this->respond([
+			'preference'	=>	$this->matchTransformer->transform($preference),
+			'matches'		=>	$this->matchTransformer->transformCollection($matches->flatten()->all()),
+			'paginator'			=>	[
+				'total_count'	=>	$matches->count()
+			]
 		]);
 	}
 }

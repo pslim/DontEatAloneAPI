@@ -8,7 +8,7 @@ class ProfilesTableSeeder extends Seeder {
 		$faker = Faker\Factory::create();
 		$faker->seed(1234);
 
-		for ( $i = 1; $i < 200; $i++ ) {
+		for ( $i = 1; $i < 1000; $i++ ) {
 			Profile::create([
 				'user_id'		=>	$i,
 				'name'			=>	$faker->name,
