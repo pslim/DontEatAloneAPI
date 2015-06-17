@@ -155,40 +155,35 @@ class MatchesController extends ApiController {
 				->where('matches.user_id', '<>', $userId);
 
 		if ($gender != 'N') {
-			$query = $query->where('profiles.gender', '=', $gender)
-							->orderBy('profiles.likes', 'DESC');
+			$query = $query->where('profiles.gender', '=', $gender);
 		}
 
-		$matches = $query->get();
+		$matches = $query->orderBy('profiles.likes', 'DESC')
+					->paginate($limit);
 
-		foreach($matches as $index => $match) {
-			$distance = $this->getDistanceInKm($lat, $long, $match->latitude, $match->longitude);
+		// foreach($matches as $index => $match) {
+		// 	$distance = $this->getDistanceInKm($lat, $long, $match->latitude, $match->longitude);
 
-			if ($distance > $maxDistance || $distance > $match->max_distance) {
-				unset($matches[$index]);
-			} else {
-				$match->distance = $distance;
-			}
-		}
+		// 	if ($distance > $maxDistance || $distance > $match->max_distance) {
+		// 		unset($matches[$index]);
+		// 	} else {
+		// 		$match->distance = $distance;
+		// 	}
+		// }
 
 
-		// $matches->setItems($matches->getCollection());
-		// dd($matches->getTotal());
-		// $paginator = Paginator::make($matches->all(), $matches->count(), $limit);
-		// $paginator->paginate($limit);
-
-		// return $this->respondWithPagination($matches, [
-		// 	'preference' => $this->matchTransformer->transform($preference),
-		// 	'matches' => $this->matchTransformer->transformCollection($matches->all())
-		// ]);
+		return $this->respondWithPagination($matches, [
+			'preference' => $this->matchTransformer->transform($preference),
+			'matches' => $this->matchTransformer->transformCollection($matches->all())
+		]);
 
 		// TODO: Fix pagination
-		return $this->respond([
-			'preference'	=>	$this->matchTransformer->transform($preference),
-			'matches'		=>	$this->matchTransformer->transformCollection($matches->flatten()->all()),
-			'paginator'			=>	[
-				'total_count'	=>	$matches->count()
-			]
-		]);
+		// return $this->respond([
+		// 	'preference'	=>	$this->matchTransformer->transform($preference),
+		// 	'matches'		=>	$this->matchTransformer->transformCollection($matches->flatten()->all()),
+		// 	'paginator'			=>	[
+		// 		'total_count'	=>	$matches->count()
+		// 	]
+		// ]);
 	}
 }
