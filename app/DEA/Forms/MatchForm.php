@@ -20,8 +20,10 @@ class MatchForm extends FormValidator {
 		'min_price'		=>	'required|integer|min:0',
 		'max_price'		=>	'required|integer|min:0',
 		'gender'		=>	'required|in:M,F,N',
-		'start_time'	=>	'required|date_format:Y-m-d h:i:s',	//TODO: Check start_time is after current time
-		'end_time'		=>  'required|date_format:Y-m-d h:i:s',	//TODO: Check end_time is after start_time
+		'start_time'	=>	'required',
+		'end_time'		=>	'required',
+		// 'start_time'	=>	'required|date_format:Y-m-d h:i:s',	//TODO: Check start_time is after current time
+		// 'end_time'		=>  'required|date_format:Y-m-d h:i:s',	//TODO: Check end_time is after start_time
 		'comment'		=>	'string:200'
 	];
 
