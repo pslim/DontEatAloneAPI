@@ -116,6 +116,8 @@ class UsersController extends ApiController {
 		// // Check if user id exists
 		$user = User::whereId($id)->firstOrFail();
 
+		// NOTE: CURRENTLY IS UPDATED IN PROFILESCONTROLLER
+
 		// // Update fields if they were inputted parameters
 		// if ($password = Input::get('password')) {
 		// 	$user->password = Hash::make($password);
