@@ -16,7 +16,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'gender',
 		'age',
 		'image_url',
-		'description'
+		'description',
+		'gcm_token'
 	];
 
 	/**

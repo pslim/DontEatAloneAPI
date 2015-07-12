@@ -115,8 +115,19 @@ class UsersController extends ApiController {
 	public function update($id) {
 		// // Check if user id exists
 		$user = User::whereId($id)->firstOrFail();
+		$input = Input::only('gcm_token');
 
-		// NOTE: CURRENTLY IS UPDATED IN PROFILESCONTROLLER
+		$user->fill($input)->save();
+
+		return $this->respond([
+			'message' => 'User was successfully updated.', 
+			'data' => [
+				'user' => $user
+			]
+		]);
+
+
+		// NOTE: BELOW IS CURRENTLY UPDATED IN PROFILESCONTROLLER
 
 		// // Update fields if they were inputted parameters
 		// if ($password = Input::get('password')) {
@@ -165,5 +176,4 @@ class UsersController extends ApiController {
 	public function destroy($id) {
 		//
 	}
-
 }

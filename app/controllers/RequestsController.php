@@ -20,7 +20,6 @@ class RequestsController extends \BaseController {
 	 * @return Response
 	 */
 	public function store() {
-		
 		$input = Input::only('user_id', 'to_user_id');
 	}
 
@@ -74,6 +73,17 @@ class RequestsController extends \BaseController {
 	 */
 	public function requestsFromUser($userId) {
 		dd("requestsFromUser!");
+	}
+
+	// $id - the request id
+	public function acceptRequest($id) {
+		$deviceToken = "cSEtmsw4KRk:APA91bFgMVRqk0WlLTAlrZcfp0RjGFnZ_LNWO-_5ipGUAnNw8mgdt2bYq2N6t-G9ruipQf2Kolgz0AijUWsS6ZTccNMziy2Sm_BYdeSPhHOhNC86W20-_o2PpaKObEcQSsTuyvH4qpyr";
+		
+		PushNotification::app('appNameAndroid')
+                ->to($deviceToken)
+                ->send('Hello World, i`m a push message');
+
+        dd("Push notification sent!");
 	}
 
 }

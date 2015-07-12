@@ -29,6 +29,7 @@ Route::group(['prefix' => 'api/v1'], function() {
 
 	Route::get('requests/{userId}/retrieved', 'RequestsController@requestsForUser');
 	Route::get('requests/{userId}/sent', 'RequestsController@requestsFromUser');
+	Route::post('requests/{id}/accept', 'RequestsController@acceptRequest');
 
 	# Authentication
 	Route::get('login', ['as' => 'login', 'uses' => 'SessionsController@store']);
