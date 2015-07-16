@@ -2,7 +2,7 @@
 
 use DEA\Forms\RequestForm;
 
-class RequestsController extends \BaseController {
+class RequestsController extends ApiController {
 
 	/**
 	 * Display a listing of the resource.
@@ -77,13 +77,16 @@ class RequestsController extends \BaseController {
 
 	// $id - the request id
 	public function acceptRequest($id) {
-		$deviceToken = "cSEtmsw4KRk:APA91bFgMVRqk0WlLTAlrZcfp0RjGFnZ_LNWO-_5ipGUAnNw8mgdt2bYq2N6t-G9ruipQf2Kolgz0AijUWsS6ZTccNMziy2Sm_BYdeSPhHOhNC86W20-_o2PpaKObEcQSsTuyvH4qpyr";
+		$deviceToken = "fMeOvXgMwok:APA91bFFr4_GH7Le1i-Rrrx2x7s4_IY4jb7poh19zWnrp9fIWuhxI31pxgNsLFOja9LIzaFFOx50lx_L-OqzCBfBWqHkTwaH5mqCT3oi1ZwCAf_u9SQ3iXvpU_R5CGX0NJg6se89OC8Q";
 		
-		PushNotification::app('appNameAndroid')
-                ->to($deviceToken)
-                ->send('Hello World, i`m a push message');
+		$collection = PushNotification::app('appNameAndroid')
+                		->to($deviceToken)
+                		->send('Someone has sent you a request!');
 
-        dd("Push notification sent!");
+        return $this->respond([
+        	'message'	=>	'User\'s request was successfully accepted.'
+        ]);
+
 	}
 
 }
