@@ -101,8 +101,7 @@ class UsersController extends ApiController {
 		}
 
 		return $this->respond([
-			// 'user' => $this->userTransformer->transform($user)
-			'user'	=>	$user
+			'user' => $this->userTransformer->transform($user)
 		]);
 	}
 

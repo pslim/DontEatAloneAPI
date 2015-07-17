@@ -24,6 +24,8 @@ class UserTransformer extends Transformer {
 				'image_url'		=>	$profile['image_url'],
 				'gender'		=>	$profile['gender'],
 				'age'			=>	$profile['age'],
+				'likes'			=>	$profile['likes'],
+				'dislikes'		=>	$profile['dislikes'],
 				'description'	=>	$profile['description']
 			]
 		];

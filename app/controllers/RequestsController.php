@@ -150,15 +150,15 @@ class RequestsController extends ApiController {
 
 	// $id - the request id
 	public function acceptRequest($id) {
-		$deviceToken = "fMeOvXgMwok:APA91bFFr4_GH7Le1i-Rrrx2x7s4_IY4jb7poh19zWnrp9fIWuhxI31pxgNsLFOja9LIzaFFOx50lx_L-OqzCBfBWqHkTwaH5mqCT3oi1ZwCAf_u9SQ3iXvpU_R5CGX0NJg6se89OC8Q";
+		// $deviceToken = "fMeOvXgMwok:APA91bFFr4_GH7Le1i-Rrrx2x7s4_IY4jb7poh19zWnrp9fIWuhxI31pxgNsLFOja9LIzaFFOx50lx_L-OqzCBfBWqHkTwaH5mqCT3oi1ZwCAf_u9SQ3iXvpU_R5CGX0NJg6se89OC8Q";
 		
-		$collection = PushNotification::app('appNameAndroid')
-                		->to($deviceToken)
-                		->send('Someone has sent you a request!');
+		// $collection = PushNotification::app('appNameAndroid')
+  //               		->to($deviceToken)
+  //               		->send('Someone has sent you a request!');
 
-        return $this->respond([
-        	'message'	=>	'User\'s request was successfully accepted.'
-        ]);
+  //       return $this->respond([
+  //       	'message'	=>	'User\'s request was successfully accepted.'
+  //       ]);
 
         //TODO: 
         //Create a meeting
