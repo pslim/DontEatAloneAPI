@@ -41,12 +41,33 @@ class ApiController extends BaseController {
 	 * @return mixed
 	 */
 	protected function respondWithPagination(Paginator $items, $data) {
+		$limit = $items->getPerPage();
+		$totalCount = $items->getTotal();
+		$totalPages = ceil($totalCount / $limit);
+		$currentPage = $items->getCurrentPage();
+
+		if ($currentPage > 1) {
+			$prevPage = $currentPage - 1;
+			$prevPage = $items->getUrl($prevPage);
+		} else {
+			$prevPage = '';
+		}
+
+		if ($currentPage < $totalPages) {
+			$nextPage = $currentPage + 1;
+			$nextPage = $items->getUrl($nextPage);
+		} else {
+			$nextPage = '';
+		}
+
 		$data = array_merge($data, [
 			'paginator'	=>	[
-				'total_count'	=>	$items->getTotal(),
-				'total_pages'	=>	ceil($items->getTotal() / $items->getPerPage()),
-				'current_page'	=>	$items->getCurrentPage(),
-				'limit'			=>	$items->getPerPage()
+				'total_count'	=>	$totalCount,
+				'total_pages'	=>	$totalPages,
+				'current_page'	=>	$currentPage,
+				'next_page'		=>	$nextPage,
+				'prev_page'		=>	$prevPage,
+				'limit'			=>	$limit
 			]
 		]);
 

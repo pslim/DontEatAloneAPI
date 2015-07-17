@@ -16,10 +16,14 @@ class MatchTransformer extends Transformer {
 		$user = $match['user'];
 		$profile = $user['profile'];
 
-		return [
+		$data = [
 			'id'			=>	$match['id'],
 			'user_id'		=>	$match['user_id'],
+			'facebook_id' 	=>	$user['facebook_id'],
 			'max_distance'	=>	$match['max_distance'],
+			'latitude'		=>	$match['latitude'],
+			'longitude'		=>	$match['longitude'],
+			'distance'		=>	$match['distance'],
 			'min_age'		=>	$match['min_age'],
 			'max_age'		=>	$match['max_age'],
 			'min_price'		=>	$match['min_price'],
@@ -34,10 +38,16 @@ class MatchTransformer extends Transformer {
 					'name' 		=>	$profile['name'],
 					'image_url' =>	$profile['image_url'],
 					'gender' 	=>	$profile['gender'],
-					'rating' 	=>	$profile['rating']
+					'likes'		=>	$profile['likes'],
+					'dislikes'	=>	$profile['dislikes']
 				]
-			// ]
 		];
+
+		if ($data['distance'] == null) {
+			unset($data['distance']);
+		}
+
+		return $data;
 	}
 
 }

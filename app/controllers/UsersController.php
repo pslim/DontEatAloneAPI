@@ -44,7 +44,7 @@ class UsersController extends ApiController {
 	 */
 	public function store() {
 
-		$userData = Input::only('email', 'password', 'password_confirmation');
+		$userData = Input::only('email', 'password', 'password_confirmation', 'facebook_id', 'gcm_token');
 		$this->userForm->validate($userData);
 		$userData['password'] = Hash::make($userData['password']);
 
@@ -101,8 +101,7 @@ class UsersController extends ApiController {
 		}
 
 		return $this->respond([
-			// 'user' => $this->userTransformer->transform($user)
-			'user'	=>	$user
+			'user' => $this->userTransformer->transform($user)
 		]);
 	}
 
@@ -114,7 +113,19 @@ class UsersController extends ApiController {
 	 */
 	public function update($id) {
 		// // Check if user id exists
-		$user = User::whereId($id)->firstOrFail();
+		$user = User::findOrFail($id);
+		$input = Input::only('facebook_id', 'gcm_token');	//TODO: support change password later
+		// $this->userForm->validate($input);
+		$user->fill($input)->save();
+
+		return $this->respond([
+			'message' => 'User was successfully updated.',
+			'data' => [
+				'user'	=> $user
+			]
+		]);
+
+		// NOTE: BELOW IS CURRENTLY UPDATED IN PROFILESCONTROLLER
 
 		// // Update fields if they were inputted parameters
 		// if ($password = Input::get('password')) {
@@ -163,5 +174,4 @@ class UsersController extends ApiController {
 	public function destroy($id) {
 		//
 	}
-
 }

@@ -3,7 +3,7 @@
 class UserTransformer extends Transformer {
 
 	/**
-	 * Transform a lesson
+	 * Transform a user
 	 *
 	 * Purpose of this is so that the client will not have to 
 	 * deal with parameter modifications from the database
@@ -17,6 +17,8 @@ class UserTransformer extends Transformer {
 		return [
 			'id'			=>	$user['id'],
 			'email'			=>	$user['email'],
+			'facebook_id'	=>	$user['facebook_id'],
+			'gcm_token'		=>	$user['gcm_token'],
 			'profile' => [
 				'id'			=>	$profile['id'],
 				'user_id' 		=>	$profile['user_id'],
@@ -24,6 +26,8 @@ class UserTransformer extends Transformer {
 				'image_url'		=>	$profile['image_url'],
 				'gender'		=>	$profile['gender'],
 				'age'			=>	$profile['age'],
+				'likes'			=>	$profile['likes'],
+				'dislikes'		=>	$profile['dislikes'],
 				'description'	=>	$profile['description']
 			]
 		];

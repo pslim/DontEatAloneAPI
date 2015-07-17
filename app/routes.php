@@ -20,11 +20,16 @@ Route::group(['prefix' => 'api/v1'], function() {
 	Route::resource('users', 'UsersController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 	Route::resource('matches', 'MatchesController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 	Route::resource('profiles', 'ProfilesController', ['only' => ['index', 'update', 'destroy']]);
+	Route::resource('requests', 'RequestsController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 	// Route::get('/{email}', ['as' => 'profile', 'uses' => 'ProfilesController@show']);
 	Route::get('users/{userId}/matches', 'MatchesController@matchesForUser');
 	Route::post('users/{userId}/like', 'ProfilesController@likeUserId');
 	Route::post('users/{userId}/dislike', 'ProfilesController@dislikeUserId');
+
+	Route::get('requests/{userId}/retrieved', 'RequestsController@requestsForUser');
+	Route::get('requests/{userId}/sent', 'RequestsController@requestsFromUser');
+	Route::post('requests/{id}/accept', 'RequestsController@acceptRequest');
 
 	# Authentication
 	Route::get('login', ['as' => 'login', 'uses' => 'SessionsController@store']);

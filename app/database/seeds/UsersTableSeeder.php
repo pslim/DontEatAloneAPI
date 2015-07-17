@@ -9,7 +9,7 @@ class UsersTableSeeder extends Seeder {
 		$faker = Faker\Factory::create();
 		$faker->seed(1234);
 
-		for ( $i = 0; $i < 200; $i++ ) {
+		for ( $i = 0; $i < 1000; $i++ ) {
 			User::create([
 				'email'		=>	$faker->email,
 				'password'	=>	Hash::make('Password')	

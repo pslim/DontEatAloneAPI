@@ -144,21 +144,46 @@ class MatchesController extends ApiController {
 
 		$limit = Input::get('limit') ? : 15;
 
-		$matches = Match::with('user.profile')
+		$query = Match::with('user.profile')
 				->join('profiles','matches.user_id', '=', 'profiles.user_id')
 				->where('profiles.age', '>=', $minAge)
 				->where('profiles.age', '<=', $maxAge)
 				->where('matches.min_price', '>=', $minPrice)
 				->where('matches.max_price', '<=', $maxPrice)
-				->where('profiles.gender', '=', $gender)
 				->where('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '<=', $end_time)
-				->orderBy('profiles.rating')
-				->paginate($limit);
-				
+				->where('matches.user_id', '<>', $userId);
+
+		if ($gender != 'N') {
+			$query = $query->where('profiles.gender', '=', $gender);
+		}
+
+		$matches = $query->orderBy('profiles.likes', 'DESC')
+					->paginate($limit);
+
+		// foreach($matches as $index => $match) {
+		// 	$distance = $this->getDistanceInKm($lat, $long, $match->latitude, $match->longitude);
+
+		// 	if ($distance > $maxDistance || $distance > $match->max_distance) {
+		// 		unset($matches[$index]);
+		// 	} else {
+		// 		$match->distance = $distance;
+		// 	}
+		// }
+
+
 		return $this->respondWithPagination($matches, [
 			'preference' => $this->matchTransformer->transform($preference),
 			'matches' => $this->matchTransformer->transformCollection($matches->all())
 		]);
+
+		// TODO: Fix pagination
+		// return $this->respond([
+		// 	'preference'	=>	$this->matchTransformer->transform($preference),
+		// 	'matches'		=>	$this->matchTransformer->transformCollection($matches->flatten()->all()),
+		// 	'paginator'			=>	[
+		// 		'total_count'	=>	$matches->count()
+		// 	]
+		// ]);
 	}
 }

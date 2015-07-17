@@ -123,6 +123,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Laracasts\Validation\ValidationServiceProvider',
+		'Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider',
 
 	),
 
@@ -175,6 +176,7 @@ return array(
 		'Mail'              => 'Illuminate\Support\Facades\Mail',
 		'Paginator'         => 'Illuminate\Support\Facades\Paginator',
 		'Password'          => 'Illuminate\Support\Facades\Password',
+		'PushNotification' => 'Davibennun\LaravelPushNotification\Facades\PushNotification',
 		'Queue'             => 'Illuminate\Support\Facades\Queue',
 		'Redirect'          => 'Illuminate\Support\Facades\Redirect',
 		'Redis'             => 'Illuminate\Support\Facades\Redis',

@@ -13,7 +13,9 @@ class UserForm extends FormValidator {
 	protected $rules = [
 		'email'					=>	'required|email|unique:users',
 		'password'				=>	'required',
-		'password_confirmation'	=>	'required'
+		'password_confirmation'	=>	'required',
+		'facebook_id'			=>	'',	//TODO: Integer?,
+		'gcm_token'				=>	'' //TODO: string?
 	];
 
 }
