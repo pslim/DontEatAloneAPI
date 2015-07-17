@@ -17,6 +17,8 @@ class UserTransformer extends Transformer {
 		return [
 			'id'			=>	$user['id'],
 			'email'			=>	$user['email'],
+			'facebook_id'	=>	$user['facebook_id'],
+			'gcm_token'		=>	$user['gcm_token'],
 			'profile' => [
 				'id'			=>	$profile['id'],
 				'user_id' 		=>	$profile['user_id'],
