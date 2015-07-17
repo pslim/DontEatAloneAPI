@@ -44,7 +44,7 @@ class UsersController extends ApiController {
 	 */
 	public function store() {
 
-		$userData = Input::only('email', 'password', 'password_confirmation', 'facebook_id');
+		$userData = Input::only('email', 'password', 'password_confirmation', 'facebook_id', 'gcm_token');
 		$this->userForm->validate($userData);
 		$userData['password'] = Hash::make($userData['password']);
 

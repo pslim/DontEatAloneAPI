@@ -16,4 +16,5 @@ class RequestForm extends FormValidator {
 	];
 
 	// TODO: Do more error checking later
+	// Check that the user ids are not the same
 }

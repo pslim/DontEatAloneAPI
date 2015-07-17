@@ -13,12 +13,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'email', 
 		'password',
 		'facebook_id',
+		'gcm_token',
 		'name',
 		'gender',
 		'age',
 		'image_url',
-		'description',
-		'gcm_token'
+		'description'
 	];
 
 	/**

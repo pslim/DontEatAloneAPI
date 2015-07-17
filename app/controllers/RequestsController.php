@@ -1,8 +1,24 @@
 <?php
 
 use DEA\Forms\RequestForm;
+use DEA\Transformers\UserRequestTransformer;
 
 class RequestsController extends ApiController {
+
+	/**
+	 * @var DEA\Forms\RequestForm
+	 */
+	protected $requestForm;
+
+	/**
+	 * @var DEA\Transformers\UserRequestTransformer
+	 */
+	protected $requestTransformer;
+
+	function __construct(RequestForm $requestForm, UserRequestTransformer $requestTransformer) {
+		$this->requestForm = $requestForm;
+		$this->requestTransformer = $requestTransformer;
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -10,8 +26,12 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function index() {
-		//
-		dd("hello!");
+		$limit = Input::get('limit') ? : 30;
+		$requests = UserRequest::paginate($limit);
+
+		return $this->respondWithPagination($requests, [
+			'requests' => $this->requestTransformer->transformCollection($requests->all())
+		]);
 	}
 
 	/**
@@ -21,6 +41,42 @@ class RequestsController extends ApiController {
 	 */
 	public function store() {
 		$input = Input::only('user_id', 'to_user_id');
+		$this->requestForm->validate($input);
+		$user = User::findOrFail($input['user_id']);
+		$toUser = User::findOrFail($input['to_user_id']);
+
+		// Check if request already exists
+		$requestExists = UserRequest::where('user_id', '=', $input['user_id'])
+			->where('to_user_id', '=', $input['to_user_id'])
+			->count();
+
+		if ($requestExists) {
+			return $this->respondCreateError('User has already sent a request to this user.');
+		}
+
+		// Create the request
+		$request = UserRequest::create($input);
+
+		// TODO: Send a notification to that person
+		$deviceToken = $toUser['gcm_token'];
+
+		if ($deviceToken) {
+			PushNotification::app('appNameAndroid')
+				->to($deviceToken)
+				->send('Someone has sent you a request!');
+		} else {
+			//TODO:
+			// save notification to database
+			// when user logins to device they will call a URI to get all their requests(send notifications) 
+			dd('save notification to database');
+		}
+
+		return $this->respondCreated('Request successfully created.', [
+			'request' => $this->requestTransformer->transform($request)
+		]);
+
+		//TODO:
+		// If user is no longer in a meeting, delete all notifications/messages.
 	}
 
 
@@ -31,7 +87,11 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function show($id) {
-		//
+		$request = UserRequest::findOrFail($id);
+
+		return $this->respond([
+			'request' => $this->requestTransformer->transform($request)
+		]);
 	}
 
 	/**
@@ -52,7 +112,10 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function destroy($id) {
-		//
+		$request = Request::findOrFail($id);
+		$request->delete();
+
+		return $this->respondDeleted('Request has been successfully deleted.');
 	}
 
 	/**
@@ -62,7 +125,12 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function requestsForUser($userId) {
-		dd("requestsForUser!");
+		//TODO: Show user profiles
+		$requests = UserRequest::where('to_user_id', '=', $userId)->get();
+
+		return $this->respond([
+			'requests' => $this->requestTransformer->transformCollection($requests->all())
+		]);
 	}
 
 	/**
@@ -72,7 +140,12 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function requestsFromUser($userId) {
-		dd("requestsFromUser!");
+		//TODO: Show user profiles
+		$requests = UserRequest::where('user_id', '=', $userId)->get();
+
+		return $this->respond([
+			'requests' => $this->requestTransformer->transformCollection($requests->all())
+		]);
 	}
 
 	// $id - the request id
@@ -86,6 +159,16 @@ class RequestsController extends ApiController {
         return $this->respond([
         	'message'	=>	'User\'s request was successfully accepted.'
         ]);
+
+        //TODO: 
+        //Create a meeting
+        //Notify both users: 
+        //Title: "Don't Eat Alone" Message: "You are now in a meeting! Talk for details on where to meet!"
+
+	}
+
+	// $id - the request id
+	public function rejectRequest($id) {
 
 	}
 

@@ -3,7 +3,7 @@
 class UserTransformer extends Transformer {
 
 	/**
-	 * Transform a lesson
+	 * Transform a user
 	 *
 	 * Purpose of this is so that the client will not have to 
 	 * deal with parameter modifications from the database
