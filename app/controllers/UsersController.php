@@ -44,7 +44,7 @@ class UsersController extends ApiController {
 	 */
 	public function store() {
 
-		$userData = Input::only('email', 'password', 'password_confirmation');
+		$userData = Input::only('email', 'password', 'password_confirmation', 'facebook_id');
 		$this->userForm->validate($userData);
 		$userData['password'] = Hash::make($userData['password']);
 
@@ -114,18 +114,17 @@ class UsersController extends ApiController {
 	 */
 	public function update($id) {
 		// // Check if user id exists
-		$user = User::whereId($id)->firstOrFail();
-		$input = Input::only('gcm_token');
-
+		$user = User::findOrFail($id);
+		$input = Input::only('facebook_id', 'gcm_token');	//TODO: support change password later
+		// $this->userForm->validate($input);
 		$user->fill($input)->save();
 
 		return $this->respond([
-			'message' => 'User was successfully updated.', 
+			'message' => 'User was successfully updated.',
 			'data' => [
-				'user' => $user
+				'user'	=> $user
 			]
 		]);
-
 
 		// NOTE: BELOW IS CURRENTLY UPDATED IN PROFILESCONTROLLER
 

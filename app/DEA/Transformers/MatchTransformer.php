@@ -19,6 +19,7 @@ class MatchTransformer extends Transformer {
 		$data = [
 			'id'			=>	$match['id'],
 			'user_id'		=>	$match['user_id'],
+			'facebook_id' 	=>	$user['facebook_id'],
 			'max_distance'	=>	$match['max_distance'],
 			'latitude'		=>	$match['latitude'],
 			'longitude'		=>	$match['longitude'],

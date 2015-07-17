@@ -12,6 +12,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $fillable = [
 		'email', 
 		'password',
+		'facebook_id',
 		'name',
 		'gender',
 		'age',
@@ -32,7 +33,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token', 'facebook_token');
+	protected $hidden = array('password', 'remember_token');
 
 
 	public function profile() {
