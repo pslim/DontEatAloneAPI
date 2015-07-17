@@ -14,4 +14,8 @@ class UserRequest extends Eloquent {
 		'user_id',
 		'to_user_id'
 	];
+
+	public function user() {
+		return $this->belongsTo('User');
+	}
 }
