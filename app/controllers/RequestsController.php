@@ -61,9 +61,6 @@ class RequestsController extends ApiController {
 		$deviceToken = $toUser['gcm_token'];
 
 		if ($deviceToken) {
-			// PushNotification::app('appNameAndroid')
-			// 	->to($deviceToken)
-			// 	->send('Someone has sent you a request!');
 			$devices = PushNotification::DeviceCollection(array(
 			    PushNotification::Device($deviceToken)
 			));
@@ -81,7 +78,6 @@ class RequestsController extends ApiController {
 			//TODO:
 			// save notification to database
 			// when user logins to device they will call a URI to get all their requests(send notifications) 
-			dd('save notification to database');
 		}
 
 		return $this->respondCreated('Request successfully created.', [
@@ -125,6 +121,8 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function destroy($id) {
+		// Note: This is basically rejecting a request.
+
 		$request = Request::findOrFail($id);
 		$request->delete();
 
@@ -139,7 +137,6 @@ class RequestsController extends ApiController {
 	 */
 	public function requestsForUser($userId) {
 		$limit = Input::get('limit') ? : 30;
-		//TODO: Show user profiles
 		$requests = UserRequest::with('user.profile')
 			->join('matches', 'matches.user_id', '=', 'requests.user_id')
 			->where('to_user_id', '=', $userId)->paginate($limit);
@@ -149,43 +146,45 @@ class RequestsController extends ApiController {
 		]);
 	}
 
-	/**
-	 * Display a listing of the resource.
-	 *
-  	 * @param  int  $id
-	 * @return Response
-	 */
-	public function requestsFromUser($userId) {
-		//TODO: Show user profiles
-		$requests = UserRequest::where('user_id', '=', $userId)->get();
-
-		return $this->respond([
-			'requests' => $this->requestTransformer->transformCollection($requests->all())
-		]);
-	}
-
 	// $id - the request id
 	public function acceptRequest($id) {
-		// $deviceToken = "fMeOvXgMwok:APA91bFFr4_GH7Le1i-Rrrx2x7s4_IY4jb7poh19zWnrp9fIWuhxI31pxgNsLFOja9LIzaFFOx50lx_L-OqzCBfBWqHkTwaH5mqCT3oi1ZwCAf_u9SQ3iXvpU_R5CGX0NJg6se89OC8Q";
-		
-		// $collection = PushNotification::app('appNameAndroid')
-  //               		->to($deviceToken)
-  //               		->send('Someone has sent you a request!');
+		// Check if the request/user_id/to_user_id exists
+		$userRequest = UserRequest::findOrFail($id);
+		$user1 = User::findOrFail($userRequest['user_id']);
+		$user2 = User::findOrFail($userRequest['to_user_id']);
 
-  //       return $this->respond([
-  //       	'message'	=>	'User\'s request was successfully accepted.'
-  //       ]);
+		// Delete the request
+		$userRequest->delete();
 
-        //TODO: 
-        //Create a meeting
-        //Notify both users: 
-        //Title: "Don't Eat Alone" Message: "You are now in a meeting! Talk for details on where to meet!"
+		// Create a new meeting
+		$meeting = new Meeting;
+		$meeting->user_id1 = $user1['id'];
+		$meeting->user_id2 = $user2['id'];
+		$meeting->save();
 
+		// Send notification about the meeting
+		$deviceToken1 = $user1['gcm_token'];
+		$deviceToken2 = $user2['gcm_token'];
+
+		if ($deviceToken1 || $deviceToken2) {
+			$devices = PushNotification::DeviceCollection(array(
+			    PushNotification::Device($deviceToken1),
+			    PushNotification::Device($deviceToken2)
+			));
+
+			$message = PushNotification::Message('Talk for details on where to meet!', array(
+		    	'title'	=>	'Meeting has started.',
+		    	'type'	=>	'meeting'
+			));
+
+			$collection = PushNotification::app('appNameAndroid')
+				->to($devices)
+				->send($message);
+		}
+
+		// Send a successfull message back to client
+        return $this->respond([
+        	'message'	=>	'User\'s request was successfully accepted. Meeting has been created.'
+        ]);
 	}
-
-	// $id - the request id
-	public function rejectRequest($id) {
-
-	}
-
 }
