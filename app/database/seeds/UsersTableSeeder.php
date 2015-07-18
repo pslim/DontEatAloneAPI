@@ -10,8 +10,10 @@ class UsersTableSeeder extends Seeder {
 		$faker->seed(1234);
 
 		for ( $i = 0; $i < 1000; $i++ ) {
+			$id = $i + 1;
+
 			User::create([
-				'email'		=>	$faker->email,
+				'email'		=>	"testing" . $id . "@gmail.com",
 				'password'	=>	Hash::make('Password')	
 			]);
 		}
