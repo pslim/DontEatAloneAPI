@@ -173,6 +173,7 @@ class RequestsController extends ApiController {
 
 		// Send a successfull message back to client
         return $this->respond([
+        	'meeting'	=>	$meeting,
         	'message'	=>	'User\'s request was successfully accepted. Meeting has been created.'
         ]);
 	}
