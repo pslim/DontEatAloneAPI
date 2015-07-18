@@ -61,9 +61,22 @@ class RequestsController extends ApiController {
 		$deviceToken = $toUser['gcm_token'];
 
 		if ($deviceToken) {
-			PushNotification::app('appNameAndroid')
-				->to($deviceToken)
-				->send('Someone has sent you a request!');
+			// PushNotification::app('appNameAndroid')
+			// 	->to($deviceToken)
+			// 	->send('Someone has sent you a request!');
+			$devices = PushNotification::DeviceCollection(array(
+			    PushNotification::Device($deviceToken)
+			));
+
+			$message = PushNotification::Message('Someone has sent you a request!', array(
+		    	'title'	=>	'Invitation',
+		    	'type'	=>	'request'
+			));
+
+			$collection = PushNotification::app('appNameAndroid')
+				->to($devices)
+				->send($message);
+
 		} else {
 			//TODO:
 			// save notification to database
