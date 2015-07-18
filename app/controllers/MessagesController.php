@@ -65,7 +65,7 @@ class MessagesController extends ApiController {
 		}
 
 		return $this->respondCreated('Message successfully created.', [
-			'message'	=>	$message
+			'user_message'	=>	$sendMessage
 		]);
 	}
 

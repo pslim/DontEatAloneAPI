@@ -21,7 +21,7 @@ class MessageTransformer extends Transformer {
 			'to_user_id'	=>	$message['to_user_id'],
 			'created_at'	=>	$message['created_at'],
 			'profile'	=>	[
-				'user_id'			=>	$profile['user_id'],
+				'user_id'		=>	$profile['user_id'],
 				'name'			=>	$profile['name'],
 				'image_url'		=>	$profile['image_url'],
 				'gender'		=>	$profile['gender'],
