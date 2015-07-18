@@ -95,6 +95,8 @@ class MessagesController extends ApiController {
 
 		$messages = UserMessage::with('user.profile')
 			->where('to_user_id', '=', $userId)
+			->orWhere('user_id', '=', $userId)
+			->orderBy('created_at', 'asc')
 			->paginate($limit);
 
 		return $this->respondWithPagination($messages, [
