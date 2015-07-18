@@ -59,6 +59,7 @@ class MessagesController extends ApiController {
 			$collection = PushNotification::app('appNameAndroid')
 				->to($devices)
 				->send($message);
+				
 		} else {
 
 		}
