@@ -29,7 +29,31 @@ class MeetingsController extends ApiController {
 	 */
 	public function destroy($id) {
 		$meeting = Meeting::findOrFail($id);
+		$user1 = User::findOrFail($meeting['user_id1']);
+		$user2 = User::findOrFail($meeting['user_id2']);
+
 		$meeting->delete();
+
+		$deviceToken1 = $user1['gcm_token'];
+		$deviceToken2 = $user2['gcm_token'];
+
+		if ($deviceToken1 || $deviceToken2) {
+			$devices = PushNotification::DeviceCollection(array(
+			    PushNotification::Device($deviceToken1),
+			    PushNotification::Device($deviceToken2)
+			));
+
+			$message = PushNotification::Message('Rate the other user!', array(
+		    	'title'	=>	'Meeting has ended.',
+		    	'type'	=>	'end_meeting'
+			));
+
+			$collection = PushNotification::app('appNameAndroid')
+				->to($devices)
+				->send($message);
+		}
+
+
 
 		// TODO:
 		// Delete all notifications about the meeting

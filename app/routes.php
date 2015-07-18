@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api/v1'], function() {
 	Route::resource('profiles', 'ProfilesController', ['only' => ['index', 'update', 'destroy']]);
 	Route::resource('requests', 'RequestsController', ['only' => ['index', 'store', 'show', 'destroy']]);
 	Route::resource('messages', 'MessagesController', ['only' => ['index', 'store', 'show', 'destroy']]);
-	Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show', 'destory']]);
+	Route::resource('meetings', 'MeetingsController', ['only' => ['index', 'show', 'destroy']]);
 
 	Route::get('users/{userId}/matches', 'MatchesController@matchesForUser');
 	Route::post('users/{userId}/like', 'ProfilesController@likeUserId');
