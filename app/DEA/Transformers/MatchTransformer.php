@@ -15,23 +15,30 @@ class MatchTransformer extends Transformer {
 	public function transform($match) {
 		$user = $match['user'];
 		$profile = $user['profile'];
+		$request = $match['userRequest'];
+
+		$invitationSent = 0;
+		if ($request != null) {
+			$invitationSent = 1;
+		}
 
 		$data = [
-			'id'			=>	$match['id'],
-			'user_id'		=>	$match['user_id'],
-			'facebook_id' 	=>	$user['facebook_id'],
-			'max_distance'	=>	$match['max_distance'],
-			'latitude'		=>	$match['latitude'],
-			'longitude'		=>	$match['longitude'],
-			'distance'		=>	$match['distance'],
-			'min_age'		=>	$match['min_age'],
-			'max_age'		=>	$match['max_age'],
-			'min_price'		=>	$match['min_price'],
-			'max_price'		=>	$match['max_price'],
-			'comment'		=>	$match['comment'],
-			'gender'		=>	$match['gender'],
-			'start_time'	=>	$match['start_time'],
-			'end_time'		=>	$match['end_time'],
+			'id'				=>	$match['id'],
+			'user_id'			=>	$match['user_id'],
+			'facebook_id' 		=>	$user['facebook_id'],
+			'invitation_sent' 	=>	$invitationSent,
+			'max_distance'		=>	$match['max_distance'],
+			'latitude'			=>	$match['latitude'],
+			'longitude'			=>	$match['longitude'],
+			'distance'			=>	$match['distance'],
+			'min_age'			=>	$match['min_age'],
+			'max_age'			=>	$match['max_age'],
+			'min_price'			=>	$match['min_price'],
+			'max_price'			=>	$match['max_price'],
+			'comment'			=>	$match['comment'],
+			'gender'			=>	$match['gender'],
+			'start_time'		=>	$match['start_time'],
+			'end_time'			=>	$match['end_time'],
 				'profile' 	=>	[
 					'id' 		=>	$profile['id'],
 					'user_id' 	=>	$profile['user_id'],

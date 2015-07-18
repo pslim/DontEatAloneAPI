@@ -144,7 +144,7 @@ class MatchesController extends ApiController {
 
 		$limit = Input::get('limit') ? : 15;
 
-		$query = Match::with('user.profile')
+		$query = Match::with('user.profile','userRequest')
 				->join('profiles','matches.user_id', '=', 'profiles.user_id')
 				->where('profiles.age', '>=', $minAge)
 				->where('profiles.age', '<=', $maxAge)

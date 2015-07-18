@@ -12,10 +12,15 @@ class UserRequest extends Eloquent {
 
 	protected $fillable = [
 		'user_id',
-		'to_user_id'
+		'to_user_id',
+		'match_id'
 	];
 
 	public function user() {
 		return $this->belongsTo('User');
+	}
+
+	public function match() {
+		return $this->belongsTo('Match');
 	}
 }

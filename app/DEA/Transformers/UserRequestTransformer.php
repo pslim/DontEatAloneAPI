@@ -20,6 +20,7 @@ class UserRequestTransformer extends Transformer {
 			'id'			=>	$request['id'],
 			'user_id'		=>	$request['user_id'],
 			'to_user_id'	=>	$request['to_user_id'],
+			'match_id'		=>	$request['match_id'],
 			'match'	=>	[
 				'latitude'		=>	$request['latitude'],
 				'longitude'		=>	$request['longitude'],

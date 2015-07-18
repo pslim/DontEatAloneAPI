@@ -28,4 +28,8 @@ class Match extends Eloquent {
 	public function user() {
 		return $this->belongsTo('User');
 	}
+
+	public function userRequest() {
+		return $this->hasOne('UserRequest');
+	}
 }

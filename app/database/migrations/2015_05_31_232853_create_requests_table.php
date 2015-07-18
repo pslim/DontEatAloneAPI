@@ -15,6 +15,7 @@ class CreateRequestsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id');		//	sender
 			$table->integer('to_user_id');	//	receiver
+			$table->integer('match_id');
 			//add new boolean column for accepted
 			$table->timestamps();
 		});

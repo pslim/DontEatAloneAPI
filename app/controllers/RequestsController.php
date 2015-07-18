@@ -40,7 +40,7 @@ class RequestsController extends ApiController {
 	 * @return Response
 	 */
 	public function store() {
-		$input = Input::only('user_id', 'to_user_id');
+		$input = Input::only('user_id', 'to_user_id', 'match_id');
 		$this->requestForm->validate($input);
 		$user = User::findOrFail($input['user_id']);
 		$toUser = User::findOrFail($input['to_user_id']);

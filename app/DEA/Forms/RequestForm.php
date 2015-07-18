@@ -12,7 +12,8 @@ class RequestForm extends FormValidator {
 
 	protected $rules = [
 		'user_id'		=>	'required|exists:users,id',
-		'to_user_id'	=>	'required|exists:users,id'
+		'to_user_id'	=>	'required|exists:users,id',
+		'match_id'		=>	'required|exists:matches,id'
 	];
 
 	// TODO: Do more error checking later
