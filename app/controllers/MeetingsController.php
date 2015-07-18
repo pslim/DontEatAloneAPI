@@ -64,7 +64,15 @@ class MeetingsController extends ApiController {
 	}
 
 	public function meetingsForUser($userId) {
+		$limit = Input::get('limit') ? : 30;
 		
+		$meetings = Meeting::where('user_id1', '=', $userId)
+			->orWhere('user_id2', '=', $userId)
+			->paginate($limit);
+
+		return $this->respondWithPagination($meetings, [
+			'meetings' => $meetings->all()
+		]);
 	}
 
 }
