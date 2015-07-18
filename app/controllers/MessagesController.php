@@ -45,11 +45,8 @@ class MessagesController extends ApiController {
 
 		$sendMessage = UserMessage::create($input);
 		$deviceToken = $toUser['gcm_token'];
-		if ($deviceToken) {
-			// PushNotification::app('appNameAndroid')
-			// 	->to($deviceToken)
-			// 	->send($sendMessage);
 
+		if ($deviceToken) {
 			$devices = PushNotification::DeviceCollection(array(
 			    PushNotification::Device($deviceToken)
 			));
@@ -62,6 +59,9 @@ class MessagesController extends ApiController {
 			$collection = PushNotification::app('appNameAndroid')
 				->to($devices)
 				->send($message);
+				
+		} else {
+
 		}
 
 		return $this->respondCreated('Message successfully created.', [
