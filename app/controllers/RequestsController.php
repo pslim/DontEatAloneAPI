@@ -112,7 +112,7 @@ class RequestsController extends ApiController {
 	public function destroy($id) {
 		// Note: This is basically rejecting a request.
 
-		$request = Request::findOrFail($id);
+		$request = UserRequest::findOrFail($id);
 		$request->delete();
 
 		return $this->respondDeleted('Request has been successfully deleted.');
