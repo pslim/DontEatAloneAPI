@@ -12,7 +12,7 @@ class ProfilesTableSeeder extends Seeder {
 		for ( $i = 1; $i < 1000; $i++ ) {
 			$n++;
 			if ($n == 11) {
-				$n = 0;
+				$n = 1;
 			}
 			Profile::create([
 				'user_id'		=>	$i,
