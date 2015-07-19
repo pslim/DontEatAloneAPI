@@ -126,8 +126,8 @@ class RequestsController extends ApiController {
 	 */
 	public function requestsForUser($userId) {
 		$limit = Input::get('limit') ? : 30;
-		$requests = UserRequest::with('user.profile')
-			->join('matches', 'matches.user_id', '=', 'requests.user_id')
+
+		$requests = UserRequest::with('user.profile', 'match')
 			->where('to_user_id', '=', $userId)->paginate($limit);
 
 		return $this->respondWithPagination($requests, [

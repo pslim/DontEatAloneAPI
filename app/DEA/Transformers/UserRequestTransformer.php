@@ -15,6 +15,7 @@ class UserRequestTransformer extends Transformer {
 	public function transform($request) {
 		$user = $request['user'];
 		$profile = $user['profile'];
+		$match = $request['match'];
 
 		return [
 			'id'			=>	$request['id'],
@@ -22,17 +23,18 @@ class UserRequestTransformer extends Transformer {
 			'to_user_id'	=>	$request['to_user_id'],
 			'match_id'		=>	$request['match_id'],
 			'match'	=>	[
-				'latitude'		=>	$request['latitude'],
-				'longitude'		=>	$request['longitude'],
-				'max_distance'	=>	$request['max_distance'],
-				'min_age'		=>	$request['min_age'],
-				'max_age'		=>	$request['max_age'],
-				'min_price'		=>	$request['min_price'],
-				'max_price'		=>	$request['max_price'],
-				'gender'		=>	$request['gender'],
-				'comment'		=>	$request['comment'],
-				'start_time'	=>	$request['start_time'],
-				'end_time'		=>	$request['end_time']
+				'id'			=>	$match['id'],
+				'latitude'		=>	$match['latitude'],
+				'longitude'		=>	$match['longitude'],
+				'max_distance'	=>	$match['max_distance'],
+				'min_age'		=>	$match['min_age'],
+				'max_age'		=>	$match['max_age'],
+				'min_price'		=>	$match['min_price'],
+				'max_price'		=>	$match['max_price'],
+				'gender'		=>	$match['gender'],
+				'comment'		=>	$match['comment'],
+				'start_time'	=>	$match['start_time'],
+				'end_time'		=>	$match['end_time']
 			],
 			'profile'	=>	[
 				'id'	=>	$profile['id'],
