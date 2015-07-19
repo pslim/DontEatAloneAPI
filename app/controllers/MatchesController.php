@@ -156,6 +156,8 @@ class MatchesController extends ApiController {
 				->where('matches.end_time','<=', $end_time)
 				->orWhere('matches.start_time', '>=', $start_time)
 				->where('matches.end_time', '>=', $end_time)
+				->orWhere('matches.start_time', '<=', $start_time)
+				->where('matches.end_time', '>=', $end_time)
 				->where('matches.user_id', '<>', $userId);
 
 		if ($gender != 'N') {
